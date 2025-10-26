@@ -1,0 +1,85 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Master.master.cs" Inherits="TiendaOnline.Master" %>
+<!DOCTYPE html>
+<html lang="es">
+<head runat="server">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>TiendaOnline</title>
+
+    <asp:ContentPlaceHolder ID="head" runat="server"></asp:ContentPlaceHolder>
+
+    <!-- Bootstrap local -->
+    <link runat="server" href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link runat="server" href="~/Content/site.css" rel="stylesheet" />
+
+    <style>
+        body { background: #f8fafc; }
+        .navbar-brand { font-weight: 700; letter-spacing: .2px; }
+        .nav-link.active { font-weight: 600; }
+        .avatar { height:40px; width:40px; border-radius:50%; object-fit:cover; }
+        .container-page { min-height: calc(100vh - 80px); }
+    </style>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <!-- ScriptManager para UpdatePanel y validación unobtrusive -->
+        <asp:ScriptManager ID="sm" runat="server" />
+
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top shadow-sm">
+            <div class="container-fluid">
+                <a runat="server" class="navbar-brand" href="~/Home.aspx">Tienda Online</a>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#topNav" aria-controls="topNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="topNav">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+    <li class="nav-item"><a runat="server" class="nav-link" href="~/Home.aspx">Inicio</a></li>
+    <li class="nav-item"><a runat="server" class="nav-link" href="~/Default.aspx">Catálogo</a></li>
+    <% if (negocio.Seguridad.sesionActiva(Session["user"])) { %>
+        <li class="nav-item"><a runat="server" class="nav-link" href="~/Favoritos.aspx">Mis Favoritos</a></li>
+        <li class="nav-item"><a runat="server" class="nav-link" href="~/MiPerfil.aspx">Mi Perfil</a></li>
+    <% } %>
+    <% if (negocio.Seguridad.esAdmin(Session["user"])) { %>
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="adminMenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">Administración</a>
+            <ul class="dropdown-menu" aria-labelledby="adminMenu">
+                <li><a runat="server" class="dropdown-item" href="~/Articulos.aspx">Artículos</a></li>
+                <li><a runat="server" class="dropdown-item" href="~/MarcasCategorias.aspx">Marcas y Categorías</a></li>
+            </ul>
+        </li>
+    <% } %>
+</ul>
+
+                    <div class="d-flex align-items-center">
+                        <% if (!negocio.Seguridad.sesionActiva(Session["user"])) { %>
+                            <a runat="server" href="~/Login.aspx" class="btn btn-success me-2">Login</a>
+                            <a runat="server" href="~/Registro.aspx" class="btn btn-outline-light">Registrarse</a>
+                        <% } else { %>
+                            <asp:Label ID="lblUser" runat="server" CssClass="text-light me-3"></asp:Label>
+                            <asp:Button Text="Salir" ID="btnSalir" CssClass="btn btn-outline-light me-3" OnClick="btnSalir_Click" runat="server" />
+                        <% } %>
+                        <asp:Image ID="imgAvatar" runat="server" CssClass="avatar" />
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container container-page py-4">
+            <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server"></asp:ContentPlaceHolder>
+        </div>
+
+        <footer class="bg-dark text-light py-3">
+            <div class="container d-flex justify-content-between">
+                <small>© <%= DateTime.Now.Year %> TiendaOnline</small>
+                <small class="text-muted">Trabajo Práctico ASP.NET Web Forms</small>
+            </div>
+        </footer>
+    </form>
+
+    <!-- Scripts locales -->
+    <script src="<%= ResolveUrl("~/Scripts/jquery-3.7.1.min.js") %>"></script>
+    <script src="<%= ResolveUrl("~/Scripts/bootstrap.bundle.min.js") %>"></script>
+</body>
+</html>
