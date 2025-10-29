@@ -13,52 +13,10 @@ namespace TiendaOnline
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            //if (Seguridad.sesionActiva(Session["user"]))
-              //  Response.Redirect("Default.aspx", false);
+            // Opcional: si ya está logueado, redirigir
+            // if (Seguridad.sesionActiva(Session["user"]))
+            //     Response.Redirect("Default.aspx", false);
         }
-
-        /*protected void btnLogin_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                var email = txtEmail.Text?.Trim();
-                var pass = txtPassword.Text;
-
-                if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(pass))
-                {
-                    ShowError("Debés completar ambos campos.");
-                    return;
-                }
-
-                var usersNeg = new UsersNegocio();
-                var u = new Users { Email = email, Pass = pass };
-
-                if (usersNeg.Login(u))
-                {
-                    Session["user"] = u;
-                    Session["admin"] = u.Admin;
-
-                    // Si guardaste a dónde quería ir (desde Master), redirigí ahí
-                    var returnUrl = Session["returnUrl"] as string;
-                    Session["returnUrl"] = null;
-                    Response.Redirect(string.IsNullOrWhiteSpace(returnUrl) ? "Default.aspx" : returnUrl, false);
-                }
-                else
-                {
-                    ShowError("Usuario o contraseña inválidos.");
-                }
-            }
-            catch (System.Threading.ThreadAbortException)
-            {
-                // ignorar redirect
-            }
-            catch (Exception)
-            {
-                ShowError("Ocurrió un error al iniciar sesión.");
-                // Si querés debug: Session["error"] = ex.ToString(); Response.Redirect("Error.aspx");
-            }
-        }*/
-
 
         protected void btnLogin_Click(object sender, EventArgs e)
         {
@@ -75,7 +33,13 @@ namespace TiendaOnline
                 {
                     Session["user"] = user;
                     Session["admin"] = user.Admin;
-                    Response.Redirect("Default.aspx", false);
+
+                    // --- INICIO DE MEJORA ---
+                    // Redirigir a la URL de retorno si existe (ej. venía de "Favoritos")
+                    var returnUrl = Session["returnUrl"] as string;
+                    Session["returnUrl"] = null; // Limpiar la URL de retorno
+                    Response.Redirect(string.IsNullOrWhiteSpace(returnUrl) ? "Default.aspx" : returnUrl, false);
+                    // --- FIN DE MEJORA ---
                 }
                 else
                 {
@@ -86,6 +50,10 @@ namespace TiendaOnline
                     });
                 }
             }
+            catch (System.Threading.ThreadAbortException)
+            {
+                // Ignorar excepción de Response.Redirect
+            }
             catch (Exception ex)
             {
                 Session["error"] = ex.ToString();
@@ -93,6 +61,5 @@ namespace TiendaOnline
             }
         }
 
-     
     }
 }

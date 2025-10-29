@@ -2,31 +2,46 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <style>
-        .card-login{ max-width:420px; }
+        .card-login{ 
+            max-width:420px; 
+        }
+        
+        /* Estilo para el título del formulario */
+        .form-title {
+            color: var(--sm-primary-accent);
+            font-weight: 700;
+        }
     </style>
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
-     <div class="card form-card mx-auto shadow-sm mt-4">
-    <div class="card-body">
-      <h2 class="h4 mb-3">Iniciar sesión</h2>
-      <asp:ValidationSummary runat="server" CssClass="text-danger mb-3" />
+     <!-- Usamos 'card-login' para el ancho y 'card' para los estilos de la paleta -->
+     <div class="card card-login mx-auto shadow-sm mt-4">
+        <div class="card-body">
+            <!-- Título actualizado -->
+            <h2 class="h4 mb-3 form-title">Iniciar sesión</h2>
+          
+            <asp:ValidationSummary runat="server" CssClass="text-danger mb-3" />
 
-       <div class="mb-3">
-        <label class="form-label">Usuario</label>
-        <asp:TextBox runat="server" ID="txtNombre" CssClass="form-control" />
-        <asp:RequiredFieldValidator runat="server" ControlToValidate="txtNombre"
-            ErrorMessage="Usuario requerido" CssClass="text-danger" />
-      </div>
+            <div class="mb-3">
+                <label class="form-label">Usuario</label>
+                <asp:TextBox runat="server" ID="txtNombre" CssClass="form-control" />
+                <asp:RequiredFieldValidator runat="server" ControlToValidate="txtNombre"
+                    ErrorMessage="Usuario requerido" CssClass="text-danger" Display="Dynamic" />
+            </div>
 
-      
-      <div class="mb-3">
-        <label class="form-label">Contraseña</label>
-        <asp:TextBox runat="server" ID="txtPassword" TextMode="Password" CssClass="form-control" />
-        <asp:RequiredFieldValidator runat="server" ControlToValidate="txtPassword" ErrorMessage="Contraseña requerida" CssClass="text-danger" />
-      </div>
-      <asp:Button runat="server" ID="btnLogin" Text="Ingresar" CssClass="btn btn-primary" OnClick="btnLogin_Click" />
-      <a href="Registro.aspx" class="ms-2">Crear cuenta</a>
+            <div class="mb-3">
+                <label class="form-label">Contraseña</label>
+                <asp:TextBox runat="server" ID="txtPassword" TextMode="Password" CssClass="form-control" />
+                <asp:RequiredFieldValidator runat="server" ControlToValidate="txtPassword" 
+                    ErrorMessage="Contraseña requerida" CssClass="text-danger" Display="Dynamic" />
+            </div>
+            
+            <!-- Botón de Ingreso actualizado (full width) -->
+            <asp:Button runat="server" ID="btnLogin" Text="Ingresar" CssClass="btn btn-otani w-100" OnClick="btnLogin_Click" />
+            
+            <!-- Link de Registro actualizado a botón secundario (full width) -->
+            <a href="Registro.aspx" class="btn btn-secondary w-100 mt-2">Crear cuenta</a>
+        </div>
     </div>
-  </div>
 </asp:Content>

@@ -43,6 +43,9 @@ namespace TiendaOnline
 
             if (!string.IsNullOrWhiteSpace(u.UrlImagenPerfil))
                 imgFoto.ImageUrl = u.UrlImagenPerfil;
+            else
+                // Asegurarse de que el placeholder se muestre si no hay imagen
+                imgFoto.ImageUrl = "https://placehold.co/200x200/F8F4F0/3D2E3C?text=Avatar";
         }
 
         protected void btnGuardarPerfil_Click(object sender, EventArgs e)
@@ -60,17 +63,27 @@ namespace TiendaOnline
                 // UrlImagenPerfil se actualiza desde btnSubirAvatar
 
                 var neg = new UsersNegocio();
-                neg.ActualizarPerfil(u);   // sp_Users_ActualizarPerfil (Nombre, Apellido, UrlImagenPerfil)
+                neg.ActualizarPerfil(u);      // sp_Users_ActualizarPerfil (Nombre, Apellido, UrlImagenPerfil)
 
-                UsuarioActual = u;         // refrescamos sesión
-                lblMsgPerfil.CssClass = "text-success";
+                UsuarioActual = u;            // refrescamos sesión
+
+                // --- INICIO DE MODIFICACIÓN ---
+                // Mensaje de éxito con clases de alerta
+                lblMsgPerfil.CssClass = "alert alert-success d-block";
                 lblMsgPerfil.Text = "Perfil actualizado correctamente.";
+                lblMsgPerfil.Visible = true;
+                // --- FIN DE MODIFICACIÓN ---
+
                 ActualizarAvatarEnMaster(u.UrlImagenPerfil);
             }
             catch (Exception ex)
             {
-                lblMsgPerfil.CssClass = "text-danger";
+                // --- INICIO DE MODIFICACIÓN ---
+                // Mensaje de error con clases de alerta
+                lblMsgPerfil.CssClass = "alert alert-danger d-block";
                 lblMsgPerfil.Text = "No se pudo actualizar el perfil.";
+                lblMsgPerfil.Visible = true;
+                // --- FIN DE MODIFICACIÓN ---
                 Session["error"] = ex.ToString();
             }
         }
@@ -84,23 +97,32 @@ namespace TiendaOnline
 
                 if (!fuAvatar.HasFile)
                 {
-                    lblMsgAvatar.CssClass = "text-danger";
+                    // --- INICIO DE MODIFICACIÓN ---
+                    lblMsgAvatar.CssClass = "alert alert-danger d-block mt-2";
                     lblMsgAvatar.Text = "Seleccioná un archivo.";
+                    lblMsgAvatar.Visible = true;
+                    // --- FIN DE MODIFICACIÓN ---
                     return;
                 }
 
                 var ext = Path.GetExtension(fuAvatar.FileName).ToLowerInvariant();
                 if (ext != ".jpg" && ext != ".jpeg" && ext != ".png")
                 {
-                    lblMsgAvatar.CssClass = "text-danger";
+                    // --- INICIO DE MODIFICACIÓN ---
+                    lblMsgAvatar.CssClass = "alert alert-danger d-block mt-2";
                     lblMsgAvatar.Text = "Formato inválido. Usa .jpg, .jpeg o .png";
+                    lblMsgAvatar.Visible = true;
+                    // --- FIN DE MODIFICACIÓN ---
                     return;
                 }
 
-                if (fuAvatar.PostedFile.ContentLength > (2 * 1024 * 1024))
+                if (fuAvatar.PostedFile.ContentLength > (2 * 1024 * 1024)) // 2MB
                 {
-                    lblMsgAvatar.CssClass = "text-danger";
+                    // --- INICIO DE MODIFICACIÓN ---
+                    lblMsgAvatar.CssClass = "alert alert-danger d-block mt-2";
                     lblMsgAvatar.Text = "El archivo supera 2MB.";
+                    lblMsgAvatar.Visible = true;
+                    // --- FIN DE MODIFICACIÓN ---
                     return;
                 }
 
@@ -116,20 +138,26 @@ namespace TiendaOnline
                 // Persistir en DB reutilizando tu método de perfil
                 u.UrlImagenPerfil = url;
                 var neg = new UsersNegocio();
-                neg.ActualizarPerfil(u);   // actualiza UrlImagenPerfil
+                neg.ActualizarPerfil(u);      // actualiza UrlImagenPerfil
 
                 // Refrescar sesión y UI
                 UsuarioActual = u;
                 imgFoto.ImageUrl = url;
                 ActualizarAvatarEnMaster(url);
 
-                lblMsgAvatar.CssClass = "text-success";
+                // --- INICIO DE MODIFICACIÓN ---
+                lblMsgAvatar.CssClass = "alert alert-success d-block mt-2";
                 lblMsgAvatar.Text = "Avatar actualizado.";
+                lblMsgAvatar.Visible = true;
+                // --- FIN DE MODIFICACIÓN ---
             }
             catch (Exception ex)
             {
-                lblMsgAvatar.CssClass = "text-danger";
+                // --- INICIO DE MODIFICACIÓN ---
+                lblMsgAvatar.CssClass = "alert alert-danger d-block mt-2";
                 lblMsgAvatar.Text = "No se pudo actualizar el avatar.";
+                lblMsgAvatar.Visible = true;
+                // --- FIN DE MODIFICACIÓN ---
                 Session["error"] = ex.ToString();
             }
         }

@@ -24,6 +24,15 @@ namespace TiendaOnline
         protected global::System.Web.UI.WebControls.ValidationSummary vs;
 
         /// <summary>
+        /// upPerfil control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UpdatePanel upPerfil;
+
+        /// <summary>
         /// imgFoto control.
         /// </summary>
         /// <remarks>

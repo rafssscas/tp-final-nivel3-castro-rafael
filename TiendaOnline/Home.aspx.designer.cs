@@ -24,6 +24,15 @@ namespace TiendaOnline
         protected global::System.Web.UI.WebControls.Repeater repTopVendidos;
 
         /// <summary>
+        /// upFiltros control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UpdatePanel upFiltros;
+
+        /// <summary>
         /// txtBuscar control.
         /// </summary>
         /// <remarks>
@@ -67,6 +76,15 @@ namespace TiendaOnline
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnLimpiar;
+
+        /// <summary>
+        /// upContenido control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UpdatePanel upContenido;
 
         /// <summary>
         /// lvProductos control.

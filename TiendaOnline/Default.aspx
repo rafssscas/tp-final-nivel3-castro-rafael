@@ -2,26 +2,7 @@
     CodeBehind="Default.aspx.cs" Inherits="TiendaOnline.Default" Async="true" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
-    <style>
-        /* Ver imagen completa sin recorte en las tarjetas */
-        .card-img-top{
-            width:100%;
-            height:180px;           /* alto fijo para cards alineadas */
-            object-fit:contain;     /* NO recorta; muestra completa */
-            background:#f8f9fa;     /* “barras” suaves si sobran márgenes */
-            border-top-left-radius:.5rem;
-            border-top-right-radius:.5rem;
-        }
-        .badge-soft{ background:#eef2ff; color:#4f46e5; }
-        .price{ font-weight:700; }
-        .truncate-2{
-            display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;
-        }
-        .toolbar{ display:flex; gap:.5rem; justify-content:flex-end; }
-
-        /* Mensajes */
-        #<%= lblMsg.ClientID %> { display:block; margin-bottom:1rem; }
-    </style>
+  
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">

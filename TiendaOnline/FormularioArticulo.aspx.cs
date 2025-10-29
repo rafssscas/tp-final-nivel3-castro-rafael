@@ -112,21 +112,7 @@ namespace TiendaOnline
             }
         }
 
-        protected void txtImagenUrl_TextChanged(object sender, EventArgs e)
-        {
-            try
-            {
-                imgPreview.ImageUrl = string.IsNullOrWhiteSpace(txtImagenUrl.Text)
-                    ? "https://placehold.co/800x600?text=Sin+Imagen"
-                    : txtImagenUrl.Text.Trim();
-            }
-            catch (Exception ex)
-            {
-                LogError(ex, "txtImagenUrl_TextChanged");
-                imgPreview.ImageUrl = "https://placehold.co/800x600?text=Sin+Imagen";
-                MostrarMsg("La URL de imagen no es válida.", true);
-            }
-        }
+       
 
         // =============== Subida a Cloudinary (botón dedicado) ===============
         protected void btnSubirCloudinary_Click(object sender, EventArgs e)
@@ -223,16 +209,23 @@ namespace TiendaOnline
 
                 if (int.TryParse(hfId.Value, out int id) && id > 0)
                 {
+
                     art.Id = id;
                     artNeg.modificar(art);
                     MostrarMsg("Artículo actualizado correctamente.", false);
+
+                    imgPreview.ImageUrl = string.IsNullOrWhiteSpace(art.ImagenUrl)
+                    ? "https://placehold.co/800x600?text=Sin+Imagen"
+                    : art.ImagenUrl;
                 }
                 else
                 {
                     int newId = artNeg.agregar(art);
-                    hfId.Value = newId.ToString();
-                    lblTitulo.Text = "Editar artículo";
+                    //hfId.Value = newId.ToString();
+                    //lblTitulo.Text = "Editar artículo";
                     MostrarMsg("Artículo creado correctamente.", false);
+
+                    LimpiarFormulario();
                 }
 
                 // Actualizar preview por si se guardó con imagen nueva
@@ -292,5 +285,50 @@ namespace TiendaOnline
         {
             Session["error"] = $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] {contexto}\n{ex}";
         }
+
+
+        private void LimpiarFormulario()
+        {
+            // Textos
+            txtCodigo.Text = string.Empty;
+            txtNombre.Text = string.Empty;
+            txtDescripcion.Text = string.Empty;
+            txtPrecio.Text = string.Empty;
+            txtImagenUrl.Text = string.Empty;
+
+            // Combos
+            ddlMarca.ClearSelection();
+            if (ddlMarca.Items.Count > 0) ddlMarca.SelectedIndex = 0;
+
+            ddlCategoria.ClearSelection();
+            if (ddlCategoria.Items.Count > 0) ddlCategoria.SelectedIndex = 0;
+
+            // Imagen + estado (forzar refresh con cache-buster)
+            string placeholder = "https://placehold.co/800x600?text=Sin+Imagen";
+            string bust = placeholder + (placeholder.Contains("?") ? "&" : "?") + "t=" + DateTime.UtcNow.Ticks;
+
+            // Server-side
+            imgPreview.ImageUrl = bust;
+
+            hfId.Value = string.Empty;
+            lblTitulo.Text = "Nuevo artículo";
+
+            // JS: limpiar fileupload y asegurar que el <img> cambie el src en el cliente
+            string js = $@"
+        (function(){{
+            var fu = document.getElementById('{fuImagen.ClientID}');
+            if (fu) fu.value = '';
+            var img = document.getElementById('{imgPreview.ClientID}');
+            if (img) img.src = '{bust.Replace("'", "\\'")}';
+        }})();";
+
+            ScriptManager.RegisterStartupScript(this, GetType(), "resetFileUploadAndImg", js, true);
+
+            // Foco en el primer campo requerido
+            txtNombre.Focus();
+        }
+
+
+
     }
 }

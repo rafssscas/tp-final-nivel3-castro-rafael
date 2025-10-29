@@ -1,64 +1,826 @@
-﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Master.master.cs" Inherits="TiendaOnline.Master" %>
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Master.Master.cs" Inherits="TiendaOnline.Master" %>
 <!DOCTYPE html>
 <html lang="es">
 <head runat="server">
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>TiendaOnline</title>
+    <title><%: Page.Title %> - Tienda Otani</title>
 
+    <!-- ContentPlaceHolder para inyectar CSS/JS por página -->
     <asp:ContentPlaceHolder ID="head" runat="server"></asp:ContentPlaceHolder>
 
-    <!-- Bootstrap local -->
-    <link runat="server" href="~/Content/bootstrap.min.css" rel="stylesheet" />
-    <link runat="server" href="~/Content/site.css" rel="stylesheet" />
+    <!-- CSS (usar ResolveUrl para rutas robustas) -->
+     <link rel="stylesheet" href="Content/bootstrap.min.css" />
+    
 
+
+     <!-- JS base -->
+    <script src="Scripts/jquery-3.7.1.min.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
     <style>
-        body { background: #f8fafc; }
-        .navbar-brand { font-weight: 700; letter-spacing: .2px; }
-        .nav-link.active { font-weight: 600; }
-        .avatar { height:40px; width:40px; border-radius:50%; object-fit:cover; }
-        .container-page { min-height: calc(100vh - 80px); }
-    </style>
+    /*
+        ============================================================
+        HOJA DE ESTILOS PRINCIPAL - SAGRADA MADRE (Nueva Paleta)
+        ============================================================
+    */
+    :root {
+        /* Nueva Paleta de Colores Sagrada Madre */
+        --sm-primary-accent: #8B5E83; /* Malva oscuro, místico */
+        --sm-secondary-accent: #C69F77; /* Ocre suave, terroso */
+        --sm-background-light: #F8F4F0; /* Blanco roto cálido */
+        --sm-card-background: #FFFFFF; /* Blanco puro para tarjetas */
+        --sm-text-dark: #3D2E3C; /* Gris oscuro cálido para texto */
+        --sm-border-color: #E0D8D0; /* Borde suave */
+
+        /* Mapeo de compatibilidad para estilos existentes */
+        --otani-pink: var(--sm-primary-accent); /* El acento principal ahora es el malva */
+        --otani-rosa: var(--sm-primary-accent);
+        --otani-rosa-claro: #A3799B; /* Un poco más claro que el primary-accent */
+        --otani-lila: var(--sm-secondary-accent); /* El ocre para un toque diferente */
+        --otani-verde-claro: var(--sm-background-light); /* Fondo general */
+        --otani-celeste: var(--sm-secondary-accent); /* El ocre para acentos secundarios */
+        --texto-principal: var(--sm-text-dark); /* Texto principal */
+
+        --otani-light: var(--sm-background-light); /* fondo suave */
+        --otani-accent: var(--sm-secondary-accent); /* el ocre para acentos */
+        --otani-dark: var(--sm-text-dark); /* texto oscuro */
+
+        /* Escala de grises práctica (mantener o ajustar si es necesario) */
+        --gray-50: #f8fafc;
+        --gray-100: #f1f5f9;
+        --gray-200: #e2e8f0;
+        --gray-300: #cbd5e1;
+        --gray-400: #94a3b8;
+        --gray-500: #64748b;
+        --gray-600: #475569;
+        --gray-700: #334155;
+        --gray-800: #1f2937;
+        --gray-900: #0f172a;
+        /* Semánticos (mantener los mismos para consistencia) */
+        --ok: #16a34a;
+        --warn: #f59e0b;
+        --error: #dc2626;
+        --info: #0284c7;
+        /* Efectos y layout */
+        --shadow-sm: 0 2px 10px rgba(16,24,40,.08);
+        --shadow-md: 0 6px 22px rgba(16,24,40,.10);
+        --radius-sm: .5rem;
+        --radius-md: .75rem;
+        --radius-lg: 1rem;
+        --font-main: 'Poppins', 'Quicksand', 'Nunito', 'Segoe UI', Arial, sans-serif;
+        --bg: var(--sm-background-light); /* Fondo general con nuevo color */
+        --card: var(--sm-card-background); /* Fondo de tarjeta con nuevo color */
+        --border: var(--sm-border-color); /* Borde con nuevo color */
+    }
+
+    /* ------------------------------- Base global ------------------------------- */
+    html, body {
+        height: 100%;
+    }
+
+    body {
+        background-color: var(--bg);
+        color: var(--texto-principal);
+        margin: 0;
+        padding: 0;
+        font-size: 1.05rem;
+        font-family: var(--font-main);
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+
+    a {
+        color: var(--otani-dark);
+        text-decoration: none;
+    }
+
+        a:hover {
+            color: var(--otani-pink); /* El acento principal para enlaces hover */
+        }
+
+    .body-content, .container-page {
+        min-height: calc(100vh - 120px);
+        padding-top: 1.25rem;
+        padding-bottom: 1.25rem;
+    }
+
+    /* ------------------------------- Navbar Otani ------------------------------ */
+    .otani-navbar {
+        position: sticky;
+        top: 0;
+        z-index: 1030;
+        background: rgba(255,255,255,0.82);
+        backdrop-filter: saturate(180%) blur(8px);
+        border-bottom: 2.5px solid var(--sm-primary-accent); /* Nuevo acento para el borde inferior */
+        transition: box-shadow .25s ease, background-color .25s ease, transform .25s ease;
+    }
+
+        .otani-navbar .navbar-brand {
+            color: var(--sm-primary-accent); /* Nuevo acento para el logo */
+            font-weight: 700;
+            font-size: 1.35rem;
+            letter-spacing: .06em;
+        }
+
+        .otani-navbar .nav-link {
+            color: var(--gray-600); /* Un gris neutro para los enlaces del nav */
+            font-weight: 600;
+        }
+
+            .otani-navbar .nav-link:hover {
+                color: var(--sm-primary-accent); /* Nuevo acento en hover */
+            }
+
+    /* Efecto Scroll (se añade con JS) */
+    .desktop-navbar-scrolled {
+        box-shadow: var(--shadow-md);
+        background: rgba(255,255,255,0.92);
+    }
+
+    /* Animación de entrada (se añade con JS) */
+    .desktop-navbar-anim {
+        transform: translateY(-6px);
+        opacity: 0;
+    }
+
+        .desktop-navbar-anim.show {
+            transform: none;
+            opacity: 1;
+            transition: all .45s ease;
+        }
+    
+    /* ------------------------------ Botones clave ------------------------------ */
+    .btn-otani { /* Ahora será el botón principal de la nueva paleta */
+        background: var(--sm-primary-accent);
+        color: #fff !important;
+        font-weight: 700;
+        border-radius: .6rem;
+        border: none;
+        box-shadow: 0 2px 8px rgba(139, 94, 131, .25); /* Sombra basada en el nuevo acento */
+        padding: .45rem 1rem;
+    }
+
+        .btn-otani:hover {
+            filter: brightness(.95);
+            color: #fff !important;
+        }
+
+    /* Bootstrap overrides */
+    .btn-primary {
+        background: linear-gradient(90deg, var(--sm-primary-accent), var(--otani-rosa-claro));
+        border: none;
+        color: #fff;
+        border-radius: 1.2rem;
+        font-weight: 600;
+        letter-spacing: .02em;
+        box-shadow: 0 2px 8px rgba(139, 94, 131, 0.14); /* Sombra basada en el nuevo acento */
+    }
+
+        .btn-primary:hover, .btn-primary:focus {
+            background: linear-gradient(90deg, var(--otani-rosa-claro), var(--sm-secondary-accent)); /* Ocre en hover */
+            color: #fff;
+        }
+
+    .btn-secondary {
+        background: var(--sm-secondary-accent); /* Nuevo color secundario */
+        border: 1px solid var(--otani-rosa-claro); /* Borde con un tono del primario */
+        color: var(--sm-text-dark) !important;
+        border-radius: .9rem;
+        padding: 6px 18px;
+    }
+
+        .btn-secondary:hover, .btn-secondary:focus {
+            background: var(--otani-rosa-claro);
+            color: #fff !important;
+        }
+
+    .btn-outline-light {
+        border-radius: .55rem;
+        color: var(--sm-text-dark) !important; /* Asegurar que el texto sea visible */
+        border-color: var(--sm-border-color) !important; /* Borde más sutil */
+    }
+        .btn-outline-light:hover {
+            background-color: var(--sm-primary-accent);
+            color: #fff !important;
+            border-color: var(--sm-primary-accent) !important;
+        }
+
+    .btn-edit {
+        background: var(--sm-background-light); /* Fondo claro para editar */
+        color: var(--sm-text-dark) !important;
+        border: 1px solid var(--sm-border-color);
+        border-radius: .7rem;
+        padding: 4px 14px;
+    }
+
+        .btn-edit:hover, .btn-edit:focus {
+            background: var(--sm-secondary-accent);
+            color: #fff !important;
+            border-color: var(--sm-secondary-accent);
+        }
+
+    .btn-delete {
+        background: var(--sm-primary-accent); /* Mantener el acento principal para eliminar */
+        color: #fff !important;
+        border: none;
+        border-radius: .7rem;
+        padding: 4px 14px;
+    }
+
+        .btn-delete:hover, .btn-delete:focus {
+            background: var(--otani-rosa-claro);
+            color: #fff !important;
+        }
+
+    /* ----------------------------- Dropdown / Menú ----------------------------- */
+    .dropdown-menu {
+        border-radius: var(--radius-md);
+        border: 1px solid var(--sm-border-color); /* Borde más sutil */
+        box-shadow: 0 10px 25px rgba(16,24,40,.08);
+    }
+
+    .dropdown-item:hover {
+        background: var(--sm-background-light); /* Fondo suave en hover */
+    }
+
+    /* --------------------------------- Tarjetas -------------------------------- */
+    .card {
+        background-color: var(--sm-card-background); /* Fondo blanco puro para tarjetas */
+        border: 1.5px solid var(--sm-border-color); /* Borde más sutil y cálido */
+        border-radius: 13px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05); /* Sombra más neutra */
+        padding: 1.2rem 1rem;
+        margin-bottom: 23px;
+        transition: transform .27s;
+    }
+
+        .card:hover {
+            transform: translateY(-6px) scale(1.01);
+            box-shadow: 0 8px 18px rgba(0,0,0,0.10); /* Sombra ligeramente más pronunciada en hover */
+        }
+
+    .card-header {
+        background: var(--sm-background-light); /* Fondo suave para el header de la tarjeta */
+        border-bottom: 1px solid var(--sm-border-color);
+        font-weight: 600;
+        color: var(--sm-text-dark); /* Color de texto del header */
+    }
+
+    .card-title {
+        color: var(--sm-primary-accent); /* El nuevo acento para los títulos */
+        font-weight: 700;
+    }
+
+    .card-subtitle {
+        color: var(--gray-500);
+    }
+
+    /* --------------------------------- Tablas ---------------------------------- */
+    .table {
+        background: var(--sm-card-background); /* Fondo de tabla blanco */
+        border-color: var(--sm-border-color);
+    }
+
+        .table thead th {
+            white-space: nowrap;
+            color: var(--gray-700);
+            font-weight: 700;
+            border-bottom: 2px solid var(--sm-border-color);
+            background: var(--sm-secondary-accent); /* Ocre para los encabezados de tabla */
+            color: #fff; /* Texto blanco para los encabezados */
+        }
+
+        .table td, .table th {
+            text-align: center !important;
+            vertical-align: middle !important;
+            white-space: nowrap;
+            padding: 9px 13px;
+            color: var(--sm-text-dark); /* Color de texto de la tabla */
+            border: 1px solid var(--sm-border-color);
+        }
+
+        .table tbody tr:nth-child(odd) {
+            background: var(--sm-background-light); /* Filas impares con fondo suave */
+        }
+
+        .table tbody tr:nth-child(even) {
+            background: #fdfaf7; /* Un tono un poco más claro para las pares */
+        }
+
+        .table tbody tr:hover {
+            background: var(--sm-primary-accent); /* Hover con el acento principal */
+            color: #fff;
+            cursor: pointer;
+        }
+
+    /* GridView ASP.NET */
+    .gridview {
+        background: var(--sm-card-background);
+        border: 1px solid var(--sm-border-color);
+        border-radius: var(--radius-md);
+        overflow: hidden;
+    }
+
+        .gridview table {
+            margin: 0;
+        }
+
+        .gridview .pager {
+            padding: .75rem;
+            border-top: 1px solid var(--sm-border-color);
+        }
+
+    /* ------------------------------- Formularios ------------------------------- */
+    .form-control, .form-select {
+        border: 1px solid var(--sm-border-color);
+        border-radius: 7px;
+        padding: 8px 13px;
+        transition: border-color .25s;
+    }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--sm-primary-accent);
+            box-shadow: 0 0 5px rgba(139, 94, 131, .3); /* Sombra en focus */
+            outline: none;
+        }
+
+    label {
+        font-weight: 600;
+        color: var(--gray-700);
+    }
+
+    /* Validación */
+    .field-validation-error, .validation-summary-errors {
+        color: var(--error);
+        font-weight: 600;
+    }
+
+    .input-validation-error {
+        border-color: var(--error) !important;
+        background: #fff1f2 !important;
+    }
+
+    /* --------------------------- Imágenes y avatares --------------------------- */
+    .avatar {
+        height: 40px;
+        width: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+
+    .img-preview {
+        width: 100%;
+        max-height: 360px;
+        object-fit: contain;
+        border: 1px dashed var(--sm-border-color);
+        border-radius: var(--radius-md);
+        background: var(--sm-card-background);
+    }
+
+    /* Tarjetas de producto (catálogo) */
+    .product-card .card-img-top {
+        height: 200px;
+        object-fit: cover;
+    }
+
+    .product-card .price {
+        font-weight: 700;
+        color: var(--sm-primary-accent); /* Precio con acento principal */
+    }
+
+    .product-card .brand {
+        color: var(--gray-500);
+        font-size: .9rem;
+    }
+
+    /* Utilidades catálogo */
+    .card-img-top.img-contain-180 {
+        width: 100%;
+        height: 180px;
+        object-fit: contain;
+        background: var(--sm-background-light); /* Fondo suave para la imagen del producto */
+        border-top-left-radius: .5rem;
+        border-top-right-radius: .5rem;
+    }
+
+    .badge-soft {
+        background: #eef2ff;
+        color: #4f46e5;
+    }
+
+    .truncate-2 {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .toolbar {
+        display: flex;
+        gap: .5rem;
+        justify-content: flex-end;
+        flex-wrap: wrap;
+    }
+
+    /* --------------------------------- Footer ---------------------------------- */
+    footer {
+        background: var(--sm-card-background); /* Fondo blanco para el footer */
+        color: var(--gray-600);
+        padding: 16px 0;
+        border-top: 1px solid var(--sm-border-color);
+    }
+
+    /* --------------------------------- KPIs ------------------------------------ */
+    .kpi-card {
+        border-radius: 19px;
+        background: var(--sm-card-background);
+        box-shadow: 0 4px 19px rgba(198,159,119,0.13); /* Sombra basada en ocre */
+        transition: transform .16s;
+    }
+
+        .kpi-card:hover {
+            transform: translateY(-4px) scale(1.015);
+            box-shadow: 0 8px 32px rgba(198,159,119,0.19);
+        }
+
+    /* ------------------------- Componentes frecuentes -------------------------- */
+    .empty {
+        background: var(--sm-card-background);
+        border: 1px dashed var(--sm-border-color);
+        border-radius: .75rem;
+        padding: 2rem;
+        color: var(--gray-600);
+        text-align: center;
+    }
+
+    .filter-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: .4rem;
+        background: var(--sm-card-background);
+        border: 1px solid var(--sm-border-color);
+        padding: .35rem .7rem;
+        border-radius: 999px;
+        cursor: pointer;
+        user-select: none;
+    }
+
+        .filter-chip.active {
+            border-color: var(--sm-primary-accent);
+            background: #F4EFF4; /* Fondo suave para chip activo */
+            color: var(--sm-text-dark);
+        }
+
+    /* RDLC/Reportes */
+    .report-container {
+        background: var(--sm-card-background);
+        border: 1px solid var(--sm-border-color);
+        border-radius: var(--radius-md);
+        padding: 1rem;
+        box-shadow: var(--shadow-sm);
+    }
+
+    /* ------------------------------ UpdatePanel ------------------------------- */
+    .update-progress {
+        position: fixed;
+        inset: 0;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        background: rgba(15,23,42,.2);
+        z-index: 2000;
+    }
+
+        .update-progress.show {
+            display: flex;
+        }
+
+        .update-progress .spinner {
+            width: 48px;
+            height: 48px;
+            border: 4px solid #fff;
+            border-top-color: var(--sm-primary-accent); /* Spinner con el nuevo acento */
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            box-shadow: 0 2px 10px rgba(0,0,0,.15);
+        }
+
+    @keyframes spin {
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    /* ------------------------------ Hero Carousel ------------------------------ */
+    .hero-carousel .carousel-item {
+        height: 340px;
+        background: #111;
+        color: #fff;
+        position: relative;
+    }
+
+    .hero-carousel .bg-cover {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: .9;
+    }
+
+    .hero-carousel .overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(180deg, rgba(0,0,0,.35), rgba(0,0,0,.55));
+    }
+
+    .hero-carousel .caption {
+        position: absolute;
+        inset-inline: 0;
+        bottom: 18px;
+        text-align: center;
+        color: #fff;
+        text-shadow: 0 2px 10px rgba(0,0,0,.5);
+    }
+
+    /* ------------------------------ DataPager / LV ----------------------------- */
+    .lv-row {
+        display: flex;
+        flex-wrap: wrap;
+        margin: -.75rem;
+    }
+
+    .lv-col {
+        width: 100%;
+        padding: .75rem;
+    }
+
+    @media (min-width:576px) {
+        .lv-col {
+            width: 50%;
+        }
+    }
+
+    @media (min-width:992px) {
+        .lv-col {
+            width: 25%;
+        }
+    }
+    /* 4 por fila */
+    .pager .page-link {
+        min-width: 42px;
+        text-align: center;
+    }
+
+    /* --------------------------------- Utilidades ------------------------------ */
+    .shadow-sm-otani {
+        box-shadow: var(--shadow-sm) !important;
+    }
+
+    .shadow-md-otani {
+        box-shadow: var(--shadow-md) !important;
+    }
+
+    .rounded-sm {
+        border-radius: var(--radius-sm) !important;
+    }
+
+    .rounded-md {
+        border-radius: var(--radius-md) !important;
+    }
+
+    .rounded-lg {
+        border-radius: var(--radius-lg) !important;
+    }
+
+    .text-muted-600 {
+        color: var(--gray-600) !important;
+    }
+
+    .text-muted-500 {
+        color: var(--gray-500) !important;
+    }
+
+    .bg-soft {
+        background: var(--sm-background-light) !important; /* Nuevo bg-soft */
+    }
+
+    .border-soft {
+        border: 1px solid var(--sm-border-color) !important; /* Nuevo border-soft */
+    }
+
+    .badge-ok {
+        background: #dcfce7;
+        color: #166534;
+    }
+
+    .badge-warn {
+        background: #fef3c7;
+        color: #92400e;
+    }
+
+    .badge-error {
+        background: #fee2e2;
+        color: #991b1b;
+    }
+
+    .badge-info {
+        background: #e0f2fe;
+        color: #075985;
+    }
+
+    /* ------------------------------- Accesibilidad ----------------------------- */
+    :focus-visible {
+        outline: 3px solid rgba(139, 94, 131, .4); /* Focus con nuevo acento */
+        outline-offset: 2px;
+    }
+
+    /* ------------------------------- Helpers ASP.NET --------------------------- */
+    .validation-summary-errors ul {
+        margin: .5rem 0 0 0;
+        padding-left: 1.1rem;
+    }
+
+    .table .action-link {
+        padding: .35rem .6rem;
+        border-radius: .5rem;
+        background: var(--sm-card-background);
+        border: 1px solid var(--sm-border-color);
+    }
+
+        .table .action-link:hover {
+            border-color: var(--sm-primary-accent);
+            color: var(--sm-text-dark);
+            background: #F4EFF4; /* Fondo suave para hover del link */
+        }
+
+    /* ------------------------------ Responsive -------------------------------- */
+    @media (max-width: 991.98px) {
+        .navbar .btn {
+            padding: .45rem .75rem;
+        }
+
+        .product-card .card-img-top {
+            height: 180px;
+        }
+
+        .otani-navbar .navbar-brand {
+            font-size: 1.2rem;
+        }
+    }
+
+    @media (max-width: 575.98px) {
+        .product-card .card-img-top {
+            height: 160px;
+        }
+
+        .otani-navbar .navbar-brand {
+            font-size: 1.15rem;
+        }
+    }
+
+    /* ----------------------------- Dashboard Buttons --------------------------- */
+    .dashboard-btn, a.btn-dashboard2 {
+        display: block;
+        width: 100%;
+        background: linear-gradient(90deg, var(--sm-primary-accent), var(--sm-secondary-accent)); /* Gradient con nueva paleta */
+        color: #fff; /* Texto blanco para estos botones */
+        border: none;
+        border-radius: 1.7rem;
+        padding: 1.1rem 0;
+        font-size: 1.18rem;
+        font-weight: 600;
+        letter-spacing: .03em;
+        box-shadow: 0 3px 16px rgba(139, 94, 131,0.11);
+        margin-bottom: .25rem;
+        text-align: center;
+        text-decoration: none !important;
+        transition: background .18s, color .18s;
+    }
+
+        .dashboard-btn:hover, .dashboard-btn:focus,
+        a.btn-dashboard2:hover, a.btn-dashboard2:focus {
+            background: linear-gradient(90deg, var(--otani-rosa-claro), var(--sm-secondary-accent));
+            color: #fff;
+        }
+
+    .dashboard-btn-danger, a.btn-dashboard-danger2 {
+        background: linear-gradient(90deg, #ff6f6f, var(--otani-rosa-claro)) !important; /* Mantener un rojo para peligro */
+        color: #fff !important;
+    }
+
+        .dashboard-btn-danger:hover, .dashboard-btn-danger:focus,
+        a.btn-dashboard-danger2:hover, a.btn-dashboard-danger2:focus {
+            background: linear-gradient(90deg, #b93b3b, var(--sm-primary-accent)) !important;
+            color: #fff !important;
+        }
+
+    /* ------------------------------- Badges extra ------------------------------ */
+    .editor-inline {
+        min-width: 260px;
+        text-align: left;
+    }
+
+    .edit-badges {
+        display: flex;
+        flex-wrap: wrap;
+        gap: .4rem;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .badge-otani {
+        background: var(--sm-secondary-accent); /* Ocre para badges */
+        color: #fff; /* Texto blanco en badges */
+        border: 1px solid var(--sm-primary-accent);
+        border-radius: 999px;
+        padding: .25rem .6rem;
+        font-size: .85rem;
+        font-weight: 600;
+        box-shadow: 0 2px 6px rgba(139, 94, 131,.10);
+    }
+
+        .badge-otani.alt {
+            background: var(--sm-background-light); /* Fondo suave para badge alternativo */
+            color: var(--sm-text-dark);
+        }
+
+    .link-cambiar {
+        font-weight: 600;
+        color: var(--sm-primary-accent);
+        text-decoration: none;
+    }
+
+        .link-cambiar:hover {
+            text-decoration: underline;
+        }
+
+    /* ------------------------------- Plegable ---------------------------------- */
+    .editor-collapsible {
+        display: none;
+        margin-top: .5rem;
+        padding: .5rem;
+        background: var(--sm-card-background);
+        border: 1px solid var(--sm-border-color);
+        border-radius: .6rem;
+        box-shadow: 0 6px 18px rgba(16,24,40,.06);
+    }
+
+        .editor-collapsible.show {
+            display: block;
+        }
+</style>
+
+
 </head>
 <body>
     <form id="form1" runat="server">
         <!-- ScriptManager para UpdatePanel y validación unobtrusive -->
         <asp:ScriptManager ID="sm" runat="server" />
 
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top shadow-sm">
+        
+        
+        
+            <nav class="navbar navbar-expand-lg navbar-light otani-navbar desktop-navbar-anim">
             <div class="container-fluid">
-                <a runat="server" class="navbar-brand" href="~/Home.aspx">Tienda Online</a>
+                <a runat="server" class="navbar-brand" href="~/Home.aspx">Tienda Otani</a>
 
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#topNav" aria-controls="topNav" aria-expanded="false" aria-label="Toggle navigation">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#topNav" aria-controls="topNav" aria-expanded="false" aria-label="Abrir menú">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
                 <div class="collapse navbar-collapse" id="topNav">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-    <li class="nav-item"><a runat="server" class="nav-link" href="~/Home.aspx">Inicio</a></li>
-    <li class="nav-item"><a runat="server" class="nav-link" href="~/Default.aspx">Catálogo</a></li>
-    <% if (negocio.Seguridad.sesionActiva(Session["user"])) { %>
-        <li class="nav-item"><a runat="server" class="nav-link" href="~/Favoritos.aspx">Mis Favoritos</a></li>
-        <li class="nav-item"><a runat="server" class="nav-link" href="~/MiPerfil.aspx">Mi Perfil</a></li>
-    <% } %>
-    <% if (negocio.Seguridad.esAdmin(Session["user"])) { %>
-        <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="adminMenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">Administración</a>
-            <ul class="dropdown-menu" aria-labelledby="adminMenu">
-                <li><a runat="server" class="dropdown-item" href="~/Articulos.aspx">Artículos</a></li>
-                <li><a runat="server" class="dropdown-item" href="~/MarcasCategorias.aspx">Marcas y Categorías</a></li>
-            </ul>
-        </li>
-    <% } %>
-</ul>
+                        <li class="nav-item"><a runat="server" class="nav-link" href="~/Home.aspx">Inicio</a></li>
+                        <li class="nav-item"><a runat="server" class="nav-link" href="~/Default.aspx">Catálogo</a></li>
+
+                        <% if (negocio.Seguridad.sesionActiva(Session["user"])) { %>
+                            <li class="nav-item"><a runat="server" class="nav-link" href="~/Favoritos.aspx">Mis Favoritos</a></li>
+                            <li class="nav-item"><a runat="server" class="nav-link" href="~/MiPerfil.aspx">Mi Perfil</a></li>
+                        <% } %>
+
+                        <% if (negocio.Seguridad.esAdmin(Session["user"])) { %>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="adminMenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">Administración</a>
+                                <ul class="dropdown-menu" aria-labelledby="adminMenu">
+                                    <li><a runat="server" class="dropdown-item" href="~/Articulos.aspx">Artículos</a></li>
+                                    <li><a runat="server" class="dropdown-item" href="~/MarcasCategorias.aspx">Marcas y Categorías</a></li>
+                                </ul>
+                            </li>
+                        <% } %>
+                    </ul>
 
                     <div class="d-flex align-items-center">
                         <% if (!negocio.Seguridad.sesionActiva(Session["user"])) { %>
-                            <a runat="server" href="~/Login.aspx" class="btn btn-success me-2">Login</a>
-                            <a runat="server" href="~/Registro.aspx" class="btn btn-outline-light">Registrarse</a>
+                            <!-- Botones de acción (modificados) -->
+                            <a runat="server" href="~/Login.aspx" class="btn btn-otani me-2">Login</a>
+                            <a runat="server" href="~/Registro.aspx" class="btn btn-secondary">Registrarse</a>
                         <% } else { %>
-                            <asp:Label ID="lblUser" runat="server" CssClass="text-light me-3"></asp:Label>
-                            <asp:Button Text="Salir" ID="btnSalir" CssClass="btn btn-outline-light me-3" OnClick="btnSalir_Click" runat="server" />
+                            <!-- Info de usuario (modificada) -->
+                            <asp:Label ID="lblUser" runat="server" CssClass="text-muted-600 me-3"></asp:Label>
+                            <asp:Button Text="Salir" ID="btnSalir" CssClass="btn btn-secondary me-3" OnClick="btnSalir_Click" runat="server" />
                         <% } %>
                         <asp:Image ID="imgAvatar" runat="server" CssClass="avatar" />
                     </div>
@@ -66,20 +828,63 @@
             </div>
         </nav>
 
+        
+        
+        
+        
+        
+   
+
         <div class="container container-page py-4">
             <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server"></asp:ContentPlaceHolder>
         </div>
 
-        <footer class="bg-dark text-light py-3">
+           <footer class="py-3">
             <div class="container d-flex justify-content-between">
-                <small>© <%= DateTime.Now.Year %> TiendaOnline</small>
+                <small>© <%= DateTime.Now.Year %> Tienda Otani</small>
                 <small class="text-muted">Trabajo Práctico ASP.NET Web Forms</small>
             </div>
         </footer>
     </form>
 
-    <!-- Scripts locales -->
+    <!-- JS (al final para que el toggler/dropdown funcionen) -->
     <script src="<%= ResolveUrl("~/Scripts/jquery-3.7.1.min.js") %>"></script>
     <script src="<%= ResolveUrl("~/Scripts/bootstrap.bundle.min.js") %>"></script>
+
+
+     <!-- Script para efectos de Navbar Otani -->
+    <script type="text/javascript">
+        $(function () {
+            // Animación de entrada del Navbar
+            var $navbar = $('.desktop-navbar-anim');
+            if ($navbar.length) {
+                setTimeout(function () {
+                    $navbar.addClass('show');
+                }, 100); // Pequeño delay
+            }
+
+            // Efecto de sombra en Navbar al hacer scroll
+            var $window = $(window);
+            var $navSticky = $('.otani-navbar');
+            if ($navSticky.length) {
+                // Ejecutar al cargar por si la página carga con scroll
+                if ($window.scrollTop() > 10) {
+                    $navSticky.addClass('desktop-navbar-scrolled');
+                }
+
+                // Ejecutar al hacer scroll
+                $window.on('scroll', function () {
+                    if ($window.scrollTop() > 10) {
+                        $navSticky.addClass('desktop-navbar-scrolled');
+                    } else {
+                        $navSticky.removeClass('desktop-navbar-scrolled');
+                    }
+                });
+            }
+        });
+    </script>
+
+
+
 </body>
 </html>

@@ -59,8 +59,15 @@ namespace TiendaOnline
                 ? artNeg.buscar(texto, idMarca, idCat)
                 : artNeg.listar();
 
+            // --- INICIO DE MODIFICACIÓN ---
+            // 1. Enlazar GridView (escritorio)
             gvArticulos.DataSource = datos;
             gvArticulos.DataBind();
+
+            // 2. Enlazar ListView (móvil)
+            lvArticulos.DataSource = datos;
+            lvArticulos.DataBind();
+            // --- FIN DE MODIFICACIÓN ---
 
             lblTotal.Text = datos != null ? $"{datos.Count} resultado(s)" : "0 resultado(s)";
             MostrarMsg(null, false, hide: true);
@@ -68,7 +75,18 @@ namespace TiendaOnline
 
         protected void btnFiltrar_Click(object sender, EventArgs e)
         {
+            // Resetear paginación de GridView
             gvArticulos.PageIndex = 0;
+
+            // --- INICIO DE MODIFICACIÓN ---
+            // Resetear paginación de ListView
+            var dataPager = lvArticulos.FindControl("DataPager1") as DataPager;
+            if (dataPager != null)
+            {
+                dataPager.SetPageProperties(0, dataPager.PageSize, false);
+            }
+            // --- FIN DE MODIFICACIÓN ---
+
             BindGrid();
         }
 
@@ -77,15 +95,58 @@ namespace TiendaOnline
             txtBuscar.Text = string.Empty;
             ddlMarca.SelectedIndex = 0;
             ddlCategoria.SelectedIndex = 0;
+
+            // Resetear paginación de GridView
             gvArticulos.PageIndex = 0;
+
+            // --- INICIO DE MODIFICACIÓN ---
+            // Resetear paginación de ListView
+            var dataPager = lvArticulos.FindControl("DataPager1") as DataPager;
+            if (dataPager != null)
+            {
+                dataPager.SetPageProperties(0, dataPager.PageSize, false);
+            }
+            // --- FIN DE MODIFICACIÓN ---
+
             BindGrid();
         }
 
         protected void gvArticulos_PageIndexChanging(object sender, GridViewPageEventArgs e)
         {
             gvArticulos.PageIndex = e.NewPageIndex;
+
+            // --- INICIO DE MODIFICACIÓN ---
+            // Sincronizar el DataPager del ListView
+            var dataPager = lvArticulos.FindControl("DataPager1") as DataPager;
+            if (dataPager != null)
+            {
+                // e.NewPageIndex es el índice de página (0, 1, 2)
+                // Debemos convertirlo a StartRowIndex (0, 10, 20)
+                int startRowIndex = e.NewPageIndex * dataPager.PageSize;
+                dataPager.SetPageProperties(startRowIndex, dataPager.PageSize, false);
+            }
+            // --- FIN DE MODIFICACIÓN ---
+
             BindGrid();
         }
+
+        // --- INICIO DE NUEVO MÉTODO ---
+        /// <summary>
+        /// Maneja la paginación del control DataPager del ListView.
+        /// </summary>
+        protected void lvArticulos_PagePropertiesChanging(object sender, PagePropertiesChangingEventArgs e)
+        {
+            // Establece las nuevas propiedades de página para el DataPager
+            (lvArticulos.FindControl("DataPager1") as DataPager).SetPageProperties(e.StartRowIndex, e.MaximumRows, false);
+
+            // Sincronizar el GridView (e.StartRowIndex es 0, 10, 20, etc.)
+            gvArticulos.PageIndex = (e.StartRowIndex / gvArticulos.PageSize);
+
+            // Volvemos a enlazar los datos con la nueva página
+            BindGrid();
+        }
+        // --- FIN DE NUEVO MÉTODO ---
+
 
         protected void gvArticulos_RowCommand(object sender, GridViewCommandEventArgs e)
         {
@@ -104,6 +165,29 @@ namespace TiendaOnline
                 }
             }
         }
+
+        // --- INICIO DE NUEVO MÉTODO ---
+        /// <summary>
+        /// Maneja los comandos de los botones dentro del ListView (ej. Eliminar).
+        /// </summary>
+        protected void lvArticulos_ItemCommand(object sender, ListViewCommandEventArgs e)
+        {
+            if (e.CommandName == "Eliminar")
+            {
+                try
+                {
+                    int id = int.Parse(e.CommandArgument.ToString());
+                    artNeg.eliminar(id);
+                    MostrarMsg("Artículo eliminado correctamente.", error: false);
+                    BindGrid(); // Recarga los datos en ambas vistas
+                }
+                catch (Exception)
+                {
+                    MostrarMsg("No se pudo eliminar el artículo.", error: true);
+                }
+            }
+        }
+        // --- FIN DE NUEVO MÉTODO ---
 
         private void MostrarMsg(string msg, bool error, bool hide = false)
         {
