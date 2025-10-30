@@ -7,17 +7,68 @@
         .table thead th{ white-space:nowrap; }
         .msg{ display:block; margin-bottom:1rem; }
         
-        /* Título con paleta */
         .form-title {
             color: var(--sm-primary-accent);
             font-weight: 700;
         }
         
-        /* Clases para los botones del GridView (sm) */
         .gv-actions .btn {
             padding: .25rem .5rem;
             font-size: .875rem;
         }
+
+        /* =================================
+           VISIBILIDAD RESPONSIVE (Como en Articulos.aspx)
+           ================================= */
+        @media (min-width: 992px) {
+            .d-mobile-only {
+                display: none;
+            }
+        }
+        @media (max-width: 991.98px) {
+            .d-desktop-only {
+                display: none;
+            }
+        }
+
+        /* =================================
+           ESTILOS VISTA MÓVIL (TARJETAS) (Como en Articulos.aspx)
+           ================================= */
+        .admin-card {
+            background-color: var(--sm-card-background);
+            border: 1px solid var(--sm-border-color);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 1rem;
+            padding: 1rem;
+        }
+
+        .admin-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+            .admin-card-header h5 {
+                font-weight: 700;
+                color: var(--sm-primary-accent);
+                margin: 0;
+            }
+
+        .admin-card-body {
+            padding: 0.5rem 0;
+        }
+
+        .admin-card-footer {
+            display: flex;
+            gap: 0.5rem;
+            border-top: 1px solid var(--sm-border-color);
+            padding-top: 1rem;
+            margin-top: 1rem;
+        }
+            .admin-card-footer .btn {
+                flex-grow: 1; 
+                text-align: center;
+            }
     </style>
 </asp:Content>
 
@@ -37,7 +88,6 @@
                         <asp:TextBox runat="server" ID="txtNuevaMarca" CssClass="form-control" MaxLength="50" />
                     </div>
                     <div class="col-md-3">
-                        <!-- Botón 'Agregar' actualizado -->
                         <asp:Button runat="server" ID="btnAgregarMarca" CssClass="btn btn-otani w-100"
                             Text="Agregar" OnClick="btnAgregarMarca_Click" />
                     </div>
@@ -45,52 +95,96 @@
 
                 <asp:UpdatePanel runat="server" ID="upMarcas" UpdateMode="Conditional">
                     <ContentTemplate>
-                        <asp:GridView runat="server" ID="gvMarcas" CssClass="table table-sm table-striped table-hover"
-                            AutoGenerateColumns="False" DataKeyNames="Id"
-                            OnRowEditing="gvMarcas_RowEditing"
-                            OnRowCancelingEdit="gvMarcas_RowCancelingEdit"
-                            OnRowUpdating="gvMarcas_RowUpdating"
-                            OnRowDeleting="gvMarcas_RowDeleting">
-                            <Columns>
-                                <asp:BoundField DataField="Id" HeaderText="Id" ReadOnly="true" Visible="false" />
-                                
-                                <asp:TemplateField HeaderText="Descripción">
-                                    <ItemTemplate>
-                                        <asp:Label runat="server" ID="lblMarcaDesc" Text='<%# Eval("Descripcion") %>' />
-                                    </ItemTemplate>
-                                    <EditItemTemplate>
-                                        <asp:TextBox runat="server" ID="txtMarcaDesc" CssClass="form-control form-control-sm"
-                                            Text='<%# Bind("Descripcion") %>' MaxLength="50" />
-                                    </EditItemTemplate>
-                                </asp:TemplateField>
-
-                               
-                                <asp:TemplateField HeaderText="Acciones" ItemStyle-CssClass="gv-actions text-end" HeaderStyle-CssClass="text-end" ItemStyle-Width="180px">
-                                    <ItemTemplate>
-                                        <div class="d-flex gap-2 justify-content-end">
+                        <!-- VISTA ESCRITORIO (TABLA) -->
+                        <div class="d-desktop-only gridview">
+                            <asp:GridView runat="server" ID="gvMarcas" CssClass="table table-sm table-striped table-hover"
+                                AutoGenerateColumns="False" DataKeyNames="Id"
+                                OnRowEditing="gvMarcas_RowEditing"
+                                OnRowCancelingEdit="gvMarcas_RowCancelingEdit"
+                                OnRowUpdating="gvMarcas_RowUpdating"
+                                OnRowDeleting="gvMarcas_RowDeleting">
+                                <Columns>
+                                    <asp:BoundField DataField="Id" HeaderText="Id" ReadOnly="true" Visible="false" />
+                                    <asp:TemplateField HeaderText="Descripción">
+                                        <ItemTemplate>
+                                            <asp:Label runat="server" ID="lblMarcaDesc" Text='<%# Eval("Descripcion") %>' />
+                                        </ItemTemplate>
+                                        <EditItemTemplate>
+                                            <asp:TextBox runat="server" ID="txtMarcaDesc" CssClass="form-control form-control-sm"
+                                                Text='<%# Bind("Descripcion") %>' MaxLength="50" />
+                                        </EditItemTemplate>
+                                    </asp:TemplateField>
+                                    <asp:TemplateField HeaderText="Acciones" ItemStyle-CssClass="gv-actions text-end" HeaderStyle-CssClass="text-end" ItemStyle-Width="180px">
+                                        <ItemTemplate>
+                                            <div class="d-flex gap-2 justify-content-end">
+                                                <asp:LinkButton runat="server" ID="btnEditar" CssClass="btn btn-sm btn-edit"
+                                                    Text="Editar" CommandName="Edit" />
+                                                <asp:LinkButton runat="server" ID="btnEliminar" CssClass="btn btn-sm btn-delete btn-eliminar-marca"
+                                                    Text="Eliminar" CommandName="Delete" 
+                                                    data-id='<%# Eval("Id") %>' 
+                                                    data-nombre='<%# Eval("Descripcion") %>'
+                                                    OnClientClick="return false;" />
+                                            </div>
+                                        </ItemTemplate>
+                                        <EditItemTemplate>
+                                            <div class="d-flex gap-2 justify-content-end">
+                                                <asp:LinkButton runat="server" ID="btnGuardar" CssClass="btn btn-sm btn-otani"
+                                                    Text="Guardar" CommandName="Update" />
+                                                <asp:LinkButton runat="server" ID="btnCancelar" CssClass="btn btn-sm btn-secondary"
+                                                    Text="Cancelar" CommandName="Cancel" />
+                                            </div>
+                                        </EditItemTemplate>
+                                    </asp:TemplateField>
+                                </Columns>
+                            </asp:GridView>
+                        </div>
+                        
+                        <!-- VISTA MÓVIL (TARJETAS) -->
+                        <div class="d-mobile-only">
+                            <asp:ListView ID="lvMarcas" runat="server"
+                                DataKeyNames="Id"
+                                OnItemEditing="lvMarcas_ItemEditing"
+                                OnItemCanceling="lvMarcas_ItemCanceling"
+                                OnItemUpdating="lvMarcas_ItemUpdating"
+                                OnItemCommand="lvMarcas_ItemCommand">
+                                <LayoutTemplate>
+                                    <div id="itemPlaceholder" runat="server"></div>
+                                </LayoutTemplate>
+                                <ItemTemplate>
+                                    <div class="admin-card">
+                                        <div class="admin-card-header">
+                                            <h5><%# Eval("Descripcion") %></h5>
+                                        </div>
+                                        <div class="admin-card-footer">
                                             <asp:LinkButton runat="server" ID="btnEditar" CssClass="btn btn-sm btn-edit"
                                                 Text="Editar" CommandName="Edit" />
-                                            <asp:LinkButton runat="server" ID="btnEliminar" CssClass="btn btn-sm btn-delete btn-eliminar-marca"
-                                                Text="Eliminar" CommandName="Delete" 
+                                            <asp:LinkButton runat="server" ID="btnEliminar" CssClass="btn btn-sm btn-delete btn-eliminar-marca-mobile"
+                                                Text="Eliminar" CommandName="Delete" CommandArgument='<%# Eval("Id") %>'
                                                 data-id='<%# Eval("Id") %>' 
                                                 data-nombre='<%# Eval("Descripcion") %>'
                                                 OnClientClick="return false;" />
                                         </div>
-                                    </ItemTemplate>
-                                    <EditItemTemplate>
-                                        <div class="d-flex gap-2 justify-content-end">
+                                    </div>
+                                </ItemTemplate>
+                                <EditItemTemplate>
+                                    <div class="admin-card">
+                                        <div class="admin-card-body">
+                                            <label class="form-label">Descripción</label>
+                                            <asp:TextBox runat="server" ID="txtMarcaDesc" CssClass="form-control"
+                                                Text='<%# Bind("Descripcion") %>' MaxLength="50" />
+                                        </div>
+                                        <div class="admin-card-footer">
                                             <asp:LinkButton runat="server" ID="btnGuardar" CssClass="btn btn-sm btn-otani"
                                                 Text="Guardar" CommandName="Update" />
                                             <asp:LinkButton runat="server" ID="btnCancelar" CssClass="btn btn-sm btn-secondary"
                                                 Text="Cancelar" CommandName="Cancel" />
                                         </div>
-                                    </EditItemTemplate>
-                                </asp:TemplateField>
-                            </Columns>
-                        </asp:GridView>
+                                    </div>
+                                </EditItemTemplate>
+                            </asp:ListView>
+                        </div>
                     </ContentTemplate>
                     <Triggers>
-                       
                         <asp:AsyncPostBackTrigger ControlID="btnAgregarMarca" EventName="Click" />
                     </Triggers>
                 </asp:UpdatePanel>
@@ -109,7 +203,6 @@
                         <asp:TextBox runat="server" ID="txtNuevaCategoria" CssClass="form-control" MaxLength="50" />
                     </div>
                     <div class="col-md-3">
-                        <!-- Botón 'Agregar' actualizado -->
                         <asp:Button runat="server" ID="btnAgregarCategoria" CssClass="btn btn-otani w-100"
                             Text="Agregar" OnClick="btnAgregarCategoria_Click" />
                     </div>
@@ -117,52 +210,96 @@
 
                 <asp:UpdatePanel runat="server" ID="upCategorias" UpdateMode="Conditional">
                     <ContentTemplate>
-                        <asp:GridView runat="server" ID="gvCategorias" CssClass="table table-sm table-striped table-hover"
-                            AutoGenerateColumns="False" DataKeyNames="Id"
-                            OnRowEditing="gvCategorias_RowEditing"
-                            OnRowCancelingEdit="gvCategorias_RowCancelingEdit"
-                            OnRowUpdating="gvCategorias_RowUpdating"
-                            OnRowDeleting="gvCategorias_RowDeleting">
-                            <Columns>
-                                <asp:BoundField DataField="Id" HeaderText="Id" ReadOnly="true" Visible="false" />
-                                
-                                <asp:TemplateField HeaderText="Descripción">
-                                    <ItemTemplate>
-                                        <asp:Label runat="server" ID="lblCatDesc" Text='<%# Eval("Descripcion") %>' />
-                                    </ItemTemplate>
-                                    <EditItemTemplate>
-                                        <asp:TextBox runat="server" ID="txtCatDesc" CssClass="form-control form-control-sm"
-                                            Text='<%# Bind("Descripcion") %>' MaxLength="50" />
-                                    </EditItemTemplate>
-                                </asp:TemplateField>
+                        <!-- VISTA ESCRITORIO (TABLA) -->
+                        <div class="d-desktop-only gridview">
+                            <asp:GridView runat="server" ID="gvCategorias" CssClass="table table-sm table-striped table-hover"
+                                AutoGenerateColumns="False" DataKeyNames="Id"
+                                OnRowEditing="gvCategorias_RowEditing"
+                                OnRowCancelingEdit="gvCategorias_RowCancelingEdit"
+                                OnRowUpdating="gvCategorias_RowUpdating"
+                                OnRowDeleting="gvCategorias_RowDeleting">
+                                <Columns>
+                                    <asp:BoundField DataField="Id" HeaderText="Id" ReadOnly="true" Visible="false" />
+                                    <asp:TemplateField HeaderText="Descripción">
+                                        <ItemTemplate>
+                                            <asp:Label runat="server" ID="lblCatDesc" Text='<%# Eval("Descripcion") %>' />
+                                        </ItemTemplate>
+                                        <EditItemTemplate>
+                                            <asp:TextBox runat="server" ID="txtCatDesc" CssClass="form-control form-control-sm"
+                                                Text='<%# Bind("Descripcion") %>' MaxLength="50" />
+                                        </EditItemTemplate>
+                                    </asp:TemplateField>
+                                    <asp:TemplateField HeaderText="Acciones" ItemStyle-CssClass="gv-actions text-end" HeaderStyle-CssClass="text-end" ItemStyle-Width="180px">
+                                        <ItemTemplate>
+                                            <div class="d-flex gap-2 justify-content-end">
+                                                <asp:LinkButton runat="server" ID="btnEditarCat" CssClass="btn btn-sm btn-edit"
+                                                    Text="Editar" CommandName="Edit" />
+                                                <asp:LinkButton runat="server" ID="btnEliminarCat" CssClass="btn btn-sm btn-delete btn-eliminar-categoria"
+                                                    Text="Eliminar" CommandName="Delete" 
+                                                    data-id='<%# Eval("Id") %>' 
+                                                    data-nombre='<%# Eval("Descripcion") %>'
+                                                    OnClientClick="return false;" />
+                                            </div>
+                                        </ItemTemplate>
+                                        <EditItemTemplate>
+                                            <div class="d-flex gap-2 justify-content-end">
+                                                <asp:LinkButton runat="server" ID="btnGuardarCat" CssClass="btn btn-sm btn-otani"
+                                                    Text="Guardar" CommandName="Update" />
+                                                <asp:LinkButton runat="server" ID="btnCancelarCat" CssClass="btn btn-sm btn-secondary"
+                                                    Text="Cancelar" CommandName="Cancel" />
+                                            </div>
+                                        </EditItemTemplate>
+                                    </asp:TemplateField>
+                                </Columns>
+                            </asp:GridView>
+                        </div>
 
-                               
-                                <asp:TemplateField HeaderText="Acciones" ItemStyle-CssClass="gv-actions text-end" HeaderStyle-CssClass="text-end" ItemStyle-Width="180px">
-                                    <ItemTemplate>
-                                        <div class="d-flex gap-2 justify-content-end">
-                                            <asp:LinkButton runat="server" ID="btnEditarCat" CssClass="btn btn-sm btn-edit"
+                        <!-- VISTA MÓVIL (TARJETAS) -->
+                        <div class="d-mobile-only">
+                            <asp:ListView ID="lvCategorias" runat="server"
+                                DataKeyNames="Id"
+                                OnItemEditing="lvCategorias_ItemEditing"
+                                OnItemCanceling="lvCategorias_ItemCanceling"
+                                OnItemUpdating="lvCategorias_ItemUpdating"
+                                OnItemCommand="lvCategorias_ItemCommand">
+                                <LayoutTemplate>
+                                    <div id="itemPlaceholder" runat="server"></div>
+                                </LayoutTemplate>
+                                <ItemTemplate>
+                                    <div class="admin-card">
+                                        <div class="admin-card-header">
+                                            <h5><%# Eval("Descripcion") %></h5>
+                                        </div>
+                                        <div class="admin-card-footer">
+                                            <asp:LinkButton runat="server" ID="btnEditar" CssClass="btn btn-sm btn-edit"
                                                 Text="Editar" CommandName="Edit" />
-                                            <asp:LinkButton runat="server" ID="btnEliminarCat" CssClass="btn btn-sm btn-delete btn-eliminar-categoria"
-                                                Text="Eliminar" CommandName="Delete" 
+                                            <asp:LinkButton runat="server" ID="btnEliminar" CssClass="btn btn-sm btn-delete btn-eliminar-categoria-mobile"
+                                                Text="Eliminar" CommandName="Delete" CommandArgument='<%# Eval("Id") %>'
                                                 data-id='<%# Eval("Id") %>' 
                                                 data-nombre='<%# Eval("Descripcion") %>'
                                                 OnClientClick="return false;" />
                                         </div>
-                                    </ItemTemplate>
-                                    <EditItemTemplate>
-                                        <div class="d-flex gap-2 justify-content-end">
-                                            <asp:LinkButton runat="server" ID="btnGuardarCat" CssClass="btn btn-sm btn-otani"
+                                    </div>
+                                </ItemTemplate>
+                                <EditItemTemplate>
+                                    <div class="admin-card">
+                                        <div class="admin-card-body">
+                                            <label class="form-label">Descripción</label>
+                                            <asp:TextBox runat="server" ID="txtCatDesc" CssClass="form-control"
+                                                Text='<%# Bind("Descripcion") %>' MaxLength="50" />
+                                        </div>
+                                        <div class="admin-card-footer">
+                                            <asp:LinkButton runat="server" ID="btnGuardar" CssClass="btn btn-sm btn-otani"
                                                 Text="Guardar" CommandName="Update" />
-                                            <asp:LinkButton runat="server" ID="btnCancelarCat" CssClass="btn btn-sm btn-secondary"
+                                            <asp:LinkButton runat="server" ID="btnCancelar" CssClass="btn btn-sm btn-secondary"
                                                 Text="Cancelar" CommandName="Cancel" />
                                         </div>
-                                    </EditItemTemplate>
-                                </asp:TemplateField>
-                            </Columns>
-                        </asp:GridView>
+                                    </div>
+                                </EditItemTemplate>
+                            </asp:ListView>
+                        </div>
                     </ContentTemplate>
                      <Triggers>
-                       
                         <asp:AsyncPostBackTrigger ControlID="btnAgregarCategoria" EventName="Click" />
                     </Triggers>
                 </asp:UpdatePanel>
@@ -176,16 +313,13 @@
       =================================
     -->
     <script type="text/javascript">
-        // Esta función se asegura de que los scripts se vuelvan a vincular
-        // después de CADA postback de UpdatePanel
         function pageLoad(sender, args) {
-            
-            // 1. CONFIRMACIÓN PARA MARCAS
-            $('.btn-eliminar-marca').on('click', function (e) {
-                e.preventDefault(); 
+
+            // 1. CONFIRMACIÓN PARA MARCAS (Escritorio + Móvil)
+            $('.btn-eliminar-marca, .btn-eliminar-marca-mobile').off('click.swal').on('click.swal', function (e) {
+                e.preventDefault();
                 var button = $(this);
                 var nombre = button.data('nombre');
-                // Buscamos el ID del LinkButton (que es único) para el script de postback
                 var postBackScript = "__doPostBack('" + button.attr('id') + "', '')";
 
                 Swal.fire({
@@ -204,9 +338,9 @@
                 });
             });
 
-            // 2. CONFIRMACIÓN PARA CATEGORÍAS
-            $('.btn-eliminar-categoria').on('click', function (e) {
-                e.preventDefault(); 
+            // 2. CONFIRMACIÓN PARA CATEGORÍAS (Escritorio + Móvil)
+            $('.btn-eliminar-categoria, .btn-eliminar-categoria-mobile').off('click.swal').on('click.swal', function (e) {
+                e.preventDefault();
                 var button = $(this);
                 var nombre = button.data('nombre');
                 var postBackScript = "__doPostBack('" + button.attr('id') + "', '')";
@@ -228,12 +362,10 @@
             });
         }
 
-        // Vinculamos la función 'pageLoad' para la carga inicial
-        $(document).ready(function() {
-            pageLoad(null, null); 
+        $(document).ready(function () {
+            pageLoad(null, null);
         });
 
-        // Y para las recargas de UpdatePanel
         if (typeof (Sys) !== 'undefined') {
             Sys.WebForms.PageRequestManager.getInstance().add_endRequest(pageLoad);
         }

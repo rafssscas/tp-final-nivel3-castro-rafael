@@ -60,6 +60,15 @@ namespace TiendaOnline
         protected global::System.Web.UI.WebControls.GridView gvMarcas;
 
         /// <summary>
+        /// lvMarcas control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ListView lvMarcas;
+
+        /// <summary>
         /// lblMsgCategorias control.
         /// </summary>
         /// <remarks>
@@ -103,5 +112,14 @@ namespace TiendaOnline
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.GridView gvCategorias;
+
+        /// <summary>
+        /// lvCategorias control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ListView lvCategorias;
     }
 }

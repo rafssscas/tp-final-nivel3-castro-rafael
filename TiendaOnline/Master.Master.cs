@@ -17,7 +17,7 @@ namespace TiendaOnline
         {
             "Articulos.aspx",
             "FormularioArticulo.aspx",
-            "Marcas.aspx",
+            "MarcasCategorias.aspx",
             "Categorias.aspx"
         };
 
