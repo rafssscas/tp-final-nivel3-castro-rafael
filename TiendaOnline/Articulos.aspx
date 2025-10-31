@@ -99,42 +99,46 @@
 
     <asp:Label ID="lblMsg" runat="server" Visible="false" CssClass="alert d-block"></asp:Label>
 
-    <!-- 
-      =================================
-      UPDATE PANEL PARA FILTROS
-      =================================
-    -->
-    <asp:UpdatePanel ID="upFiltros" runat="server" UpdateMode="Conditional">
-        <ContentTemplate>
+   
+    <!-- =================================
+     UPDATE PANEL PARA FILTROS
+     ================================= -->
+<asp:UpdatePanel ID="upFiltros" runat="server" UpdateMode="Conditional">
+    <ContentTemplate>
+        <!-- 🔑 NUEVO: Panel con DefaultButton para capturar ENTER -->
+        <asp:Panel ID="pnlFiltros" runat="server" CssClass="filters-scope" DefaultButton="btnFiltrar">
             <div class="card mb-3 shadow-sm">
                 <div class="card-body">
                     <div class="row g-3 align-items-end">
                         <div class="col-lg-4 col-md-12">
                             <label class="form-label">Buscar</label>
-                            <asp:TextBox runat="server" ID="txtBuscar" CssClass="form-control" placeholder="Nombre, código o descripción..." />
+                            <asp:TextBox runat="server" ID="txtBuscar" CssClass="form-control"
+                                         placeholder="Nombre, código o descripción..." />
                         </div>
                         <div class="col-lg-3 col-md-6">
                             <label class="form-label">Marca</label>
-                            <!-- AutoPostBack y OnSelectedIndexChanged para filtro automático -->
+                            <!-- AutoPostBack para filtrar al cambiar -->
                             <asp:DropDownList runat="server" ID="ddlMarca" CssClass="form-select"
-                                AutoPostBack="true" OnSelectedIndexChanged="btnFiltrar_Click" />
+                                              AutoPostBack="true" OnSelectedIndexChanged="btnFiltrar_Click" />
                         </div>
                         <div class="col-lg-3 col-md-6">
                             <label class="form-label">Categoría</label>
-                            <!-- AutoPostBack y OnSelectedIndexChanged para filtro automático -->
+                            <!-- AutoPostBack para filtrar al cambiar -->
                             <asp:DropDownList runat="server" ID="ddlCategoria" CssClass="form-select"
-                                AutoPostBack="true" OnSelectedIndexChanged="btnFiltrar_Click" />
+                                              AutoPostBack="true" OnSelectedIndexChanged="btnFiltrar_Click" />
                         </div>
                         <div class="col-lg-2 col-md-12 d-flex gap-2">
-                            <!-- Botón "Filtrar" (disparado automáticamente) -->
-                            <asp:Button runat="server" ID="btnFiltrar" CssClass="btn btn-otani w-100" Text="Filtrar" OnClick="btnFiltrar_Click" />
-                            <asp:Button runat="server" ID="btnLimpiar" CssClass="btn btn-secondary w-100" Text="Limpiar" OnClick="btnLimpiar_Click" />
+                            <asp:Button runat="server" ID="btnFiltrar" CssClass="btn btn-otani w-100"
+                                        Text="Filtrar" OnClick="btnFiltrar_Click" />
+                            <asp:Button runat="server" ID="btnLimpiar" CssClass="btn btn-secondary w-100"
+                                        Text="Limpiar" OnClick="btnLimpiar_Click" />
                         </div>
                     </div>
                 </div>
             </div>
-        </ContentTemplate>
-    </asp:UpdatePanel>
+        </asp:Panel>
+    </ContentTemplate>
+</asp:UpdatePanel>
 
     <!-- 
       =================================

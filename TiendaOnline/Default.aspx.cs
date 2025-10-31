@@ -158,28 +158,60 @@ namespace TiendaOnline
             if (lista == null || lista.Count == 0)
                 throw new InvalidOperationException("No hay artículos para exportar.");
 
-            // CSV
-            byte[] bytesCsv = _artNeg.ExportarArticulosCsv(lista);
-            EnsureAttachmentSize(bytesCsv);
+            // Generar XLSX
+            byte[] bytesXlsx = ReportService.CatalogoArticulosXlsx(lista, "Catálogo de Artículos — Tienda Otani");
+            EnsureAttachmentSize(bytesXlsx);
 
             string fecha = DateTime.Now.ToString("yyyyMMdd");
-
             var adj = new AttachmentDto
             {
-                FileName = $"articulos_{fecha}.csv",
-                ContentType = "text/csv",
-                Content = bytesCsv
+                FileName = $"catalogo_otani_{fecha}.xlsx",
+                ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                Content = bytesXlsx
             };
 
             _email.ArmarCorreoConAdjuntos(
                 emailDestino: to,
-                asunto: $"Catálogo de Artículos (CSV) - {DateTime.Now:yyyy-MM-dd}",
-                cuerpoHtml: "<p>Adjunto catálogo con Artículo / Stock / Precio en formato Excel (CSV).</p>",
+                asunto: $"Catálogo de Artículos (Excel) - {DateTime.Now:yyyy-MM-dd}",
+                cuerpoHtml: "<p>Adjuntamos el catálogo completo en formato Excel (.xlsx) con Código / Descripción / Precio.</p>",
                 adjuntos: new List<AttachmentDto> { adj }
             );
 
             _email.EnviarEmail();
         }
+
+
+        private void EnviarPdfA(string to)
+        {
+            var lista = ObtenerListaParaExport();
+            if (lista == null || lista.Count == 0)
+                throw new InvalidOperationException("No hay artículos para exportar.");
+
+            // URL del logo (podés reemplazar por tu Azure Blob si querés)
+            string logoUrl = "https://otanistorageimg.blob.core.windows.net/imagenes/logoOtani2.png";
+
+            // Generar PDF
+            byte[] bytesPdf = ReportService.CatalogoArticulosPdf(lista, "Catálogo de Artículos — Tienda Otani", logoUrl);
+            EnsureAttachmentSize(bytesPdf);
+
+            string fecha = DateTime.Now.ToString("yyyyMMdd");
+            var adj = new AttachmentDto
+            {
+                FileName = $"catalogo_otani_{fecha}.pdf",
+                ContentType = "application/pdf",
+                Content = bytesPdf
+            };
+
+            _email.ArmarCorreoConAdjuntos(
+                emailDestino: to,
+                asunto: $"Catálogo de Artículos (PDF) - {DateTime.Now:yyyy-MM-dd}",
+                cuerpoHtml: "<p>Adjuntamos el catálogo en PDF con encabezado institucional y espacio de logo.</p>",
+                adjuntos: new List<AttachmentDto> { adj }
+            );
+
+            _email.EnviarEmail();
+        }
+
 
         private void EnviarHtmlA(string to)
         {
@@ -223,30 +255,39 @@ namespace TiendaOnline
         {
             try
             {
+                // Valida controles del grupo vgEnviar
+                Page.Validate("vgEnviar");
+                if (!Page.IsValid)
+                {
+                    // Mantener el modal abierto si hay error de validación
+                    ScriptManager.RegisterStartupScript(this, GetType(), "reopenModal",
+                        "var m=new bootstrap.Modal(document.getElementById('modalEmail')); m.show();", true);
+                    return;
+                }
+
                 string to = txtEmailDestino.Text?.Trim();
                 if (!IsValidEmail(to))
                 {
                     SetMsg("El email ingresado no es válido.", isOk: false);
+
+                    // Reabrir modal para que el usuario corrija
+                    ScriptManager.RegisterStartupScript(this, GetType(), "reopenModal",
+                        "var m=new bootstrap.Modal(document.getElementById('modalEmail')); m.show();", true);
                     return;
                 }
 
                 string tipo = hfTipoEnvio.Value;
 
-                // Mantengo async para no bloquear el hilo (aunque el envío sea sync en EmailService)
                 await Task.Run(() =>
                 {
-                    if (tipo == "excel")
-                        EnviarExcelA(to);
-                    else if (tipo == "htmlpdf")
-                        EnviarHtmlA(to);
-                    else
-                        throw new InvalidOperationException("Tipo de envío no reconocido.");
+                    if (tipo == "excel") EnviarExcelA(to);
+                    else if (tipo == "htmlpdf") EnviarPdfA(to);
+                    else throw new InvalidOperationException("Tipo de envío no reconocido.");
                 });
 
-                bool okExcel = tipo == "excel";
-                SetMsg(okExcel
-                    ? "📧 Enviado: catálogo en Excel (CSV)."
-                    : "📧 Enviado: catálogo en HTML (provisorio de PDF).", isOk: true);
+                SetMsg(tipo == "excel"
+                    ? "📧 Enviado: catálogo en Excel (.xlsx)."
+                    : "📧 Enviado: catálogo en PDF.", isOk: true);
             }
             catch (Exception ex)
             {
@@ -254,6 +295,7 @@ namespace TiendaOnline
                 SetMsg("No se pudo enviar el correo.", isOk: false);
             }
         }
+
 
         protected void btnFiltrar_Click(object sender, EventArgs e)
         {

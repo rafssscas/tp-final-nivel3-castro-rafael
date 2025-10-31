@@ -27,7 +27,7 @@
     */
     :root {
         /* Nueva Paleta de Colores Sagrada Madre */
-        --sm-primary-accent: #8B5E83; /* Malva oscuro, místico */
+        --sm-primary-accent: #F797E6; /* Malva oscuro, místico #8B5E83*/
         --sm-secondary-accent: #C69F77; /* Ocre suave, terroso */
         --sm-background-light: #F8F4F0; /* Blanco roto cálido */
         --sm-card-background: #FFFFFF; /* Blanco puro para tarjetas */
@@ -748,14 +748,16 @@
         }
 
     .link-cambiar {
-        font-weight: 600;
-        color: var(--sm-primary-accent);
-        text-decoration: none;
-    }
+    font-weight: 600;
+    color: var(--otani-rosa);
+    text-decoration: none;
+    transition: color .2s ease;
+}
 
-        .link-cambiar:hover {
-            text-decoration: underline;
-        }
+.link-cambiar:hover {
+    color: var(--otani-pink);
+    text-decoration: underline;
+}
 
     /* ------------------------------- Plegable ---------------------------------- */
     .editor-collapsible {
@@ -785,7 +787,7 @@
         
             <nav class="navbar navbar-expand-lg navbar-light otani-navbar desktop-navbar-anim">
             <div class="container-fluid">
-                <a runat="server" class="navbar-brand" href="~/Home.aspx">Tienda Otani</a>
+                <a runat="server" class="navbar-brand" href="~/Home.aspx">TIENDA OTANI</a>
 
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#topNav" aria-controls="topNav" aria-expanded="false" aria-label="Abrir menú">
                     <span class="navbar-toggler-icon"></span>
@@ -820,7 +822,8 @@
                         <% } else { %>
                             <!-- Info de usuario (modificada) -->
                             <asp:Label ID="lblUser" runat="server" CssClass="text-muted-600 me-3"></asp:Label>
-                            <asp:Button Text="Salir" ID="btnSalir" CssClass="btn btn-secondary me-3" OnClick="btnSalir_Click" runat="server" />
+                            <asp:Button Text="Salir" ID="btnSalir" CssClass="btn btn-outline-light me-3" OnClick="btnSalir_Click" runat="server" CausesValidation="false"
+                                UseSubmitBehavior="false"/>
                         <% } %>
                         <asp:Image ID="imgAvatar" runat="server" CssClass="avatar" />
                     </div>
@@ -839,12 +842,20 @@
             <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server"></asp:ContentPlaceHolder>
         </div>
 
-           <footer class="py-3">
-            <div class="container d-flex justify-content-between">
-                <small>© <%= DateTime.Now.Year %> Tienda Otani</small>
-                <small class="text-muted">Trabajo Práctico ASP.NET Web Forms</small>
-            </div>
-        </footer>
+          <footer class="bg-white border-top py-3 mt-auto">
+    <div class="container text-center">
+        <p class="mb-0 fw-semibold text-muted-600">
+            © <%= DateTime.Now.Year %> – <span class="text-dark">Tienda Otani</span>
+        </p>
+        <p class="mb-0" style="font-size:0.95em;">
+            Desarrollado por
+            <a href="https://quipuconnect.com" target="_blank" class="fw-bold link-cambiar">
+                QUIPU CONNECT
+            </a>
+        </p>
+    </div>
+</footer>
+
     </form>
 
     <!-- JS (al final para que el toggler/dropdown funcionen) -->
@@ -884,6 +895,19 @@
         });
     </script>
 
+    <script>
+        // Evita que ENTER dispare un submit fuera de un bloque de filtros
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') {
+                // permitimos enter en textareas
+                if (e.target && e.target.tagName === 'TEXTAREA') return;
+
+                // si no está dentro de un bloque de filtros, prevenimos el submit
+                var inFilters = e.target.closest && e.target.closest('.filters-scope');
+                if (!inFilters) e.preventDefault();
+            }
+        });
+    </script>
 
 
 </body>

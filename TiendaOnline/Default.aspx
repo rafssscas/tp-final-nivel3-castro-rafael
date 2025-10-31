@@ -94,7 +94,7 @@
               <asp:RegularExpressionValidator runat="server" ControlToValidate="txtEmailDestino"
                   CssClass="text-danger" ValidationGroup="vgEnviar"
                   ErrorMessage="Formato de email no válido."
-                  ValidationExpression="^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$" Display="Dynamic" />
+                  ValidationExpression="^[^@\s]+@[^@\s]+\.[^@\s]+$" Display="Dynamic" />
             </div>
           </div>
           <div class="modal-footer">

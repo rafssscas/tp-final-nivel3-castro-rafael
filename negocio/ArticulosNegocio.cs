@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Text;
 
 namespace negocio
@@ -274,5 +275,17 @@ namespace negocio
             if (s == null) return "";
             return System.Net.WebUtility.HtmlEncode(s);
         }
+
+        public List<Articulos> listarByIds(IEnumerable<int> ids)
+        {
+            // Implementá el SP o query IN (@ids) en tu DAO.
+            // Si aún no podés hacer IN, como fallback:
+            var todos = listar() ?? new List<Articulos>();
+            var set = new HashSet<int>(ids);
+            return todos.Where(a => set.Contains(a.Id)).ToList();
+        }
+
+
+
     }
 }

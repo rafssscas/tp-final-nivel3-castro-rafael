@@ -56,37 +56,37 @@
         <div class="carousel-inner">
             <div class="carousel-item active">
                 <img class="bg-cover"
-                    src="https://res.cloudinary.com/ds8ezx92r/image/upload/v1760165780/cld-sample-2.jpg"
+                    src="https://res.cloudinary.com/ds8ezx92r/image/upload/v1761890426/productos/3750f49337c4443ea5d3b095e80cd8a6.jpg"
                     alt="Banner 1"
                     onerror="this.src='https://placehold.co/1600x500/F8F4F0/3D2E3C?text=Sagrada+Madre';" />
                 <span class="overlay"></span>
                 <div class="caption">
-                    <h2 class="h3 mb-1">Bienvenido a Tienda Sagrada Madre</h2>
-                    <p class="mb-0">Sahumerios artesanales y ecológicos</p>
+                    <h2 class="h3 mb-1"></h2>
+                    <p class="mb-0"></p>
                 </div>
             </div>
 
             <div class="carousel-item">
                 <img class="bg-cover"
-                    src="https://drive.google.com/uc?export=view&id=1YDL58CtgLifzc9zDbV2M5Y35VoZ4H_5K"
+                    src="https://res.cloudinary.com/ds8ezx92r/image/upload/v1761890488/productos/6ffdd5e0a9cc42448b7da25a2d84e080.jpg"
                     alt="Banner 2"
                     onerror="this.src='https://placehold.co/1600x500/F8F4F0/3D2E3C?text=Productos+Destacados';" />
                 <span class="overlay"></span>
                 <div class="caption">
-                    <h2 class="h3 mb-1">Los más vendidos</h2>
-                    <p class="mb-0">Elegidos por nuestros clientes</p>
+                    <h2 class="h3 mb-1"></h2>
+                    <p class="mb-0"></p>
                 </div>
             </div>
 
             <div class="carousel-item">
                 <img class="bg-cover"
-                    src="https://drive.usercontent.google.com/download?id=1CG8LSqUv45HFaHEtMqQq0qFBJY8Htm7x&export=view"
+                    src="https://res.cloudinary.com/ds8ezx92r/image/upload/v1761890532/productos/1004cb8d08c74a8db03b8b172958e79a.jpg"
                     alt="Banner 3"
                     onerror="this.src='https://placehold.co/1600x500/F8F4F0/3D2E3C?text=Cat%C3%A1logo+Completo';" />
                 <span class="overlay"></span>
                 <div class="caption">
-                    <h2 class="h3 mb-1">Catálogo actualizado</h2>
-                    <p class="mb-0">Buscá por aroma, marca y categoría</p>
+                    <h2 class="h3 mb-1"></h2>
+                    <p class="mb-0"></p>
                 </div>
             </div>
         </div>
@@ -104,7 +104,7 @@
     <!-- ====== TOP 4 MÁS VENDIDOS ====== -->
     <section class="mb-4">
         <div class="d-flex align-items-center justify-content-between mb-2">
-            <h3 class="h5 mb-0" style="color: var(--sm-primary-accent); font-weight: 600;">Más vendidos</h3>
+            <h3 class="h5 mb-0" style="color: var(--sm-primary-accent); font-weight: 600;">Productos destacados</h3>
             <!-- Botón actualizado -->
             <a runat="server" href="~/Default.aspx" class="btn btn-sm btn-secondary">Ver catálogo</a>
         </div>
@@ -144,37 +144,38 @@
     </section>
 
     <!-- ====== BUSCADOR / FILTROS (con UpdatePanel) ====== -->
-    <asp:UpdatePanel ID="upFiltros" runat="server" UpdateMode="Conditional">
-        <ContentTemplate>
-            <div class="card mb-3 shadow-sm">
-                <div class="card-body">
-                    <div class="row g-3 align-items-end">
-                        <div class="col-lg-4 col-md-12">
-                            <label class="form-label">Buscar</label>
-                            <asp:TextBox runat="server" ID="txtBuscar" CssClass="form-control" placeholder="Nombre, código o descripción..." />
-                        </div>
-                        <div class="col-lg-3 col-md-6">
-                            <label class="form-label">Marca</label>
-                            <!-- Filtro automático -->
-                            <asp:DropDownList runat="server" ID="ddlMarca" CssClass="form-select"
-                                AutoPostBack="true" OnSelectedIndexChanged="btnFiltrar_Click" />
-                        </div>
-                        <div class="col-lg-3 col-md-6">
-                            <label class="form-label">Categoría</label>
-                            <!-- Filtro automático -->
-                            <asp:DropDownList runat="server" ID="ddlCategoria" CssClass="form-select"
-                                AutoPostBack="true" OnSelectedIndexChanged="btnFiltrar_Click" />
-                        </div>
-                        <div class="col-lg-2 col-md-12 d-flex gap-2">
-                            <!-- Botones actualizados -->
-                            <asp:Button runat="server" ID="btnFiltrar" CssClass="btn btn-otani w-100" Text="Filtrar" OnClick="btnFiltrar_Click" />
-                            <asp:Button runat="server" ID="btnLimpiar" CssClass="btn btn-secondary w-100" Text="Limpiar" OnClick="btnLimpiar_Click" />
-                        </div>
-                    </div>
-                </div>
+<asp:UpdatePanel ID="upFiltros" runat="server" UpdateMode="Conditional">
+  <ContentTemplate>
+    <!-- ⚠️ NUEVO: panel con DefaultButton -->
+    <asp:Panel ID="pnlFiltros" runat="server" DefaultButton="btnFiltrar">
+      <div class="card mb-3 shadow-sm">
+        <div class="card-body">
+          <div class="row g-3 align-items-end">
+            <div class="col-lg-4 col-md-12">
+              <label class="form-label">Buscar</label>
+              <asp:TextBox runat="server" ID="txtBuscar" CssClass="form-control" placeholder="Nombre, código o descripción..." />
             </div>
-        </ContentTemplate>
-    </asp:UpdatePanel>
+            <div class="col-lg-3 col-md-6">
+              <label class="form-label">Marca</label>
+              <asp:DropDownList runat="server" ID="ddlMarca" CssClass="form-select"
+                  AutoPostBack="true" OnSelectedIndexChanged="btnFiltrar_Click" />
+            </div>
+            <div class="col-lg-3 col-md-6">
+              <label class="form-label">Categoría</label>
+              <asp:DropDownList runat="server" ID="ddlCategoria" CssClass="form-select"
+                  AutoPostBack="true" OnSelectedIndexChanged="btnFiltrar_Click" />
+            </div>
+            <div class="col-lg-2 col-md-12 d-flex gap-2">
+              <asp:Button runat="server" ID="btnFiltrar" CssClass="btn btn-otani w-100" Text="Filtrar" OnClick="btnFiltrar_Click" />
+              <asp:Button runat="server" ID="btnLimpiar" CssClass="btn btn-secondary w-100" Text="Limpiar" OnClick="btnLimpiar_Click" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </asp:Panel>
+  </ContentTemplate>
+</asp:UpdatePanel>
+
 
     <!-- ====== PRODUCTOS (con UpdatePanel) ====== -->
     <asp:UpdatePanel ID="upContenido" runat="server" UpdateMode="Conditional">
