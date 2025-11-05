@@ -26,61 +26,77 @@ namespace TiendaOnline
             if (!IsPostBack) BindFavoritos();
         }
 
-        private void BindFavoritos()
+        private void BindFavoritos(Users user = null)
         {
-            var user = (Users)Session["user"];
-            var favs = favNeg.listarPorUser(user.Id) ?? new List<dominio.Favoritos>(); // <- ajustá tipo si tu DTO es distinto
-
-            if (favs.Count == 0)
+            try
             {
-                pnlVacio.Visible = true;
-                repFavoritos.DataSource = null;
-                repFavoritos.DataBind();
-                return;
-            }
+                if (user == null)
+                    user = Session["user"] as Users;
 
-            // 1) Traigo TODOS los artículos que necesito en un solo viaje
-            var idsArticulos = favs.Select(f => f.IdArticulo).Distinct().ToList();
-            var articulos = artNeg.listarByIds(idsArticulos) ?? new List<dominio.Articulos>(); // usa tu método real
-            var dict = articulos.ToDictionary(a => a.Id, a => a);
+                if (!Seguridad.sesionActiva(user))
+                    return;
 
-            // 2) Proyección a un ViewModel plano para el Repeater (evita null refs y Evals anidados)
-            var vm = favs
-                .Select(f =>
+                var favs = favNeg.listarPorUser(user.Id) ?? new List<dominio.Favoritos>();
+                if (favs.Count == 0)
+                {
+                    pnlVacio.Visible = true;
+                    repFavoritos.DataSource = null;
+                    repFavoritos.DataBind();
+                    return;
+                }
+
+                var idsArticulos = favs.Select(f => f.IdArticulo).Distinct().ToList();
+                var articulos = artNeg.listarByIds(idsArticulos) ?? new List<dominio.Articulos>();
+                var dict = articulos.ToDictionary(a => a.Id, a => a);
+
+                var vm = favs.Select(f =>
                 {
                     dict.TryGetValue(f.IdArticulo, out var art);
                     return new FavVM
                     {
                         IdFavorito = f.Id,
                         IdArticulo = f.IdArticulo,
-                        Nombre = art?.Nombre ?? "(Sin nombre)",
-                        Descripcion = art?.Descripcion ?? "",
-                        ImagenUrl = string.IsNullOrWhiteSpace(art?.ImagenUrl)
-                                    ? "https://placehold.co/600x400?text=Sin+Imagen"
-                                    : art.ImagenUrl,
-                        PrecioTexto = art?.Precio.HasValue == true ? "$ " + art.Precio.Value.ToString("N2") : "Consultar"
+                        Nombre = art != null ? art.Nombre : "(Sin nombre)",
+                        Descripcion = art != null ? art.Descripcion ?? string.Empty : string.Empty,
+                        ImagenUrl = art != null && !string.IsNullOrWhiteSpace(art.ImagenUrl)
+                                    ? art.ImagenUrl
+                                    : "https://placehold.co/600x400?text=Sin+Imagen",
+                        PrecioTexto = (art != null && art.Precio.HasValue)
+                                      ? "$ " + art.Precio.Value.ToString("N2")
+                                      : "Consultar"
                     };
-                })
-                .ToList();
+                }).ToList();
 
-            pnlVacio.Visible = vm.Count == 0;
-            repFavoritos.DataSource = vm;
-            repFavoritos.DataBind();
-        }
-
-        protected void repFavoritos_ItemCommand(object source, System.Web.UI.WebControls.RepeaterCommandEventArgs e)
-        {
-            if (e.CommandName == "Quitar")
+                pnlVacio.Visible = vm.Count == 0;
+                repFavoritos.DataSource = vm;
+                repFavoritos.DataBind();
+            }
+            catch
             {
-                if (int.TryParse(e.CommandArgument.ToString(), out int idFav))
-                {
-                    favNeg.eliminar(idFav);
-                    BindFavoritos();
-                }
+                pnlVacio.Visible = true;
+                repFavoritos.DataSource = null;
+                repFavoritos.DataBind();
             }
         }
 
-        // ---- ViewModel para la vista ----
+
+        protected void repFavoritos_ItemCommand(object source, RepeaterCommandEventArgs e)
+        {
+            if (e.CommandName == "Quitar" && int.TryParse(e.CommandArgument.ToString(), out int idFav))
+            {
+                try
+                {
+                    favNeg.eliminar(idFav);
+                }
+                catch
+                {
+                    // Podés mostrar un mensaje si querés
+                }
+                BindFavoritos();
+            }
+        }
+
+        // ViewModel de la vista
         private class FavVM
         {
             public int IdFavorito { get; set; }
@@ -92,3 +108,4 @@ namespace TiendaOnline
         }
     }
 }
+

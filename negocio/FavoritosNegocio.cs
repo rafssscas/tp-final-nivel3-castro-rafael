@@ -56,7 +56,8 @@ namespace negocio
                 datos.setearProcedimiento("dbo.sp_Favoritos_Agregar");
                 datos.setearParametro("@IdUser", idUser);
                 datos.setearParametro("@IdArticulo", idArticulo);
-                datos.ejecutarLectura(); // el SP devuelve el registro final, pero no lo necesitamos acá
+                
+                datos.ejecutarAccion();
             }
             catch { throw; }
             finally { datos.cerrarConexion(); }

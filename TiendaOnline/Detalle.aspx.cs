@@ -1,11 +1,8 @@
 ﻿using dominio;
 using negocio;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+
 using System.Web.UI;
-using System.Web.UI.WebControls;
 
 namespace TiendaOnline
 {
@@ -25,6 +22,7 @@ namespace TiendaOnline
             if (!int.TryParse(Request.QueryString["id"], out int id))
             {
                 pnlNotFound.Visible = true;
+                pnlDetalle.Visible = false;
                 return;
             }
 
@@ -32,10 +30,12 @@ namespace TiendaOnline
             if (art == null)
             {
                 pnlNotFound.Visible = true;
+                pnlDetalle.Visible = false;
                 return;
             }
 
             // Mostrar datos
+            pnlNotFound.Visible = false;
             pnlDetalle.Visible = true;
             hfIdArticulo.Value = art.Id.ToString();
 
@@ -54,7 +54,6 @@ namespace TiendaOnline
         {
             try
             {
-                // Requiere sesión
                 var user = Session["user"] as Users;
                 if (!Seguridad.sesionActiva(user))
                 {
@@ -63,16 +62,26 @@ namespace TiendaOnline
                     return;
                 }
 
-                int idArticulo = int.Parse(hfIdArticulo.Value);
+                if (!int.TryParse(hfIdArticulo.Value, out int idArticulo))
+                {
+                    lblMsg.CssClass = "alert alert-danger d-block mb-2";
+                    lblMsg.Text = "No se pudo identificar el artículo.";
+                    lblMsg.Visible = true;
+                    return;
+                }
+
+                // Opcional: si tu FavoritosNegocio tiene un método de verificación, podés evitar duplicados.
+                // if (favNeg.Existe(user.Id, idArticulo)) { ... }
+
                 favNeg.agregar(user.Id, idArticulo);
 
+                lblMsg.CssClass = "alert alert-success d-block mb-2";
                 lblMsg.Text = "Artículo agregado a tus favoritos.";
                 lblMsg.Visible = true;
             }
-            catch (System.Threading.ThreadAbortException) { }
             catch (Exception)
             {
-                lblMsg.CssClass = "text-danger d-block mb-2";
+                lblMsg.CssClass = "alert alert-danger d-block mb-2";
                 lblMsg.Text = "No se pudo agregar a favoritos.";
                 lblMsg.Visible = true;
             }

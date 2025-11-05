@@ -237,10 +237,7 @@
             </asp:ListView>
         </ContentTemplate>
         
-        <Triggers>
-            <asp:AsyncPostBackTrigger ControlID="btnFiltrar" EventName="Click" />
-            <asp:AsyncPostBackTrigger ControlID="btnLimpiar" EventName="Click" />
-        </Triggers>
+        
     </asp:UpdatePanel>
 
     <!-- 

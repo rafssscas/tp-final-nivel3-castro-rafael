@@ -31,28 +31,6 @@ namespace negocio
             finally { datos.cerrarConexion(); }
         }
 
-        public Categorias obtenerPorId(int id)
-        {
-            var datos = new AccesoDatos();
-            try
-            {
-                datos.setearProcedimiento("dbo.sp_Categorias_ObtenerPorId");
-                datos.setearParametro("@Id", id);
-                datos.ejecutarLectura();
-                if (datos.Lector.Read())
-                {
-                    return new Categorias
-                    {
-                        Id = (int)datos.Lector["Id"],
-                        Descripcion = datos.Lector["Descripcion"] as string
-                    };
-                }
-                return null;
-            }
-            catch { throw; }
-            finally { datos.cerrarConexion(); }
-        }
-
         public int agregar( Categorias c)
         {
             if (c == null || string.IsNullOrWhiteSpace(c.Descripcion))

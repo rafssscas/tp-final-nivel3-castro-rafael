@@ -18,7 +18,10 @@ namespace TiendaOnline
         {
             try
             {
-                // if (!Seguridad.esAdmin(Session["user"])) { Response.Redirect("~/Login.aspx", false); return; }
+                if (!Seguridad.esAdmin(Session["user"])) 
+                { 
+                    Response.Redirect("~/Login.aspx", false); return; 
+                }
 
                 if (!IsPostBack)
                 {

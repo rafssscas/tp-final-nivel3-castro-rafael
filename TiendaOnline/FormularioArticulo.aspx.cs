@@ -34,7 +34,7 @@ namespace TiendaOnline
                     CargarSiEdicion();
                 }
             }
-            catch (System.Threading.ThreadAbortException) { /* Response.Redirect */ }
+            
             catch (Exception ex)
             {
                 LogError(ex, "Page_Load");
@@ -77,33 +77,38 @@ namespace TiendaOnline
             {
                 lblTitulo.Text = "Nuevo artículo";
 
-                if (int.TryParse(Request.QueryString["id"], out int id))
+                int id;
+                if (!int.TryParse(Request.QueryString["id"], out id)) return;
+
+                var art = artNeg.obtenerPorId(id);
+                if (art == null)
                 {
-                    var art = artNeg.obtenerPorId(id);
-                    if (art == null)
-                    {
-                        MostrarMsg("No se encontró el artículo.", true);
-                        return;
-                    }
-
-                    lblTitulo.Text = "Editar artículo";
-                    hfId.Value = art.Id.ToString();
-                    txtCodigo.Text = art.Codigo;
-                    txtNombre.Text = art.Nombre;
-                    txtDescripcion.Text = art.Descripcion;
-
-                    ddlMarca.SelectedValue = art.IdMarca.ToString();
-                    ddlCategoria.SelectedValue = art.IdCategoria.ToString();
-
-                    txtImagenUrl.Text = art.ImagenUrl;
-                    imgPreview.ImageUrl = string.IsNullOrWhiteSpace(art.ImagenUrl)
-                        ? "https://placehold.co/800x600?text=Sin+Imagen"
-                        : art.ImagenUrl;
-
-                    txtPrecio.Text = art.Precio.HasValue
-                        ? art.Precio.Value.ToString("N2", new CultureInfo("es-AR"))
-                        : string.Empty;
+                    MostrarMsg("No se encontró el artículo.", true);
+                    return;
                 }
+
+                lblTitulo.Text = "Editar artículo";
+                hfId.Value = art.Id.ToString();
+
+                txtCodigo.Text = art.Codigo;
+                txtNombre.Text = art.Nombre;
+                txtDescripcion.Text = art.Descripcion;
+
+                // Selección segura de combos
+                var itmMarca = ddlMarca.Items.FindByValue(art.IdMarca.ToString());
+                if (itmMarca != null) ddlMarca.SelectedValue = itmMarca.Value;
+
+                var itmCat = ddlCategoria.Items.FindByValue(art.IdCategoria.ToString());
+                if (itmCat != null) ddlCategoria.SelectedValue = itmCat.Value;
+
+                txtImagenUrl.Text = art.ImagenUrl;
+                imgPreview.ImageUrl = string.IsNullOrWhiteSpace(art.ImagenUrl)
+                    ? "https://placehold.co/800x600?text=Sin+Imagen"
+                    : art.ImagenUrl;
+
+                txtPrecio.Text = art.Precio.HasValue
+                    ? art.Precio.Value.ToString("N2", new CultureInfo("es-AR"))
+                    : string.Empty;
             }
             catch (Exception ex)
             {
@@ -112,7 +117,6 @@ namespace TiendaOnline
             }
         }
 
-       
 
         // =============== Subida a Cloudinary (botón dedicado) ===============
         protected void btnSubirCloudinary_Click(object sender, EventArgs e)
@@ -154,8 +158,7 @@ namespace TiendaOnline
         {
             try
             {
-                if (!Page.IsValid)
-                    return;
+                if (!Page.IsValid) return;
 
                 if (string.IsNullOrWhiteSpace(txtNombre.Text))
                 {
@@ -169,12 +172,13 @@ namespace TiendaOnline
                     return;
                 }
 
-                // Parseo de precio (opcional). Acepta coma o punto.
+                // Parseo de precio
                 decimal? precio = null;
                 if (!string.IsNullOrWhiteSpace(txtPrecio.Text))
                 {
                     var textoPrecio = txtPrecio.Text.Trim();
-                    if (!TryParseDecimal(textoPrecio, out decimal p) || p < 0)
+                    decimal p;
+                    if (!TryParseDecimal(textoPrecio, out p) || p < 0)
                     {
                         MostrarMsg("Precio inválido (usá números y separador decimal , o .).", true);
                         return;
@@ -182,7 +186,7 @@ namespace TiendaOnline
                     precio = p;
                 }
 
-                // Si no hay URL pero el usuario eligió archivo, subimos ahora
+                // Subir imagen si no hay URL pero sí archivo
                 if (string.IsNullOrWhiteSpace(txtImagenUrl.Text) && fuImagen.HasFile)
                 {
                     if (!ValidarArchivoImagen(fuImagen)) return;
@@ -207,35 +211,24 @@ namespace TiendaOnline
                     Precio = precio
                 };
 
-                if (int.TryParse(hfId.Value, out int id) && id > 0)
+                int idExistente;
+                if (int.TryParse(hfId.Value, out idExistente) && idExistente > 0)
                 {
-
-                    art.Id = id;
+                    art.Id = idExistente;
                     artNeg.modificar(art);
                     MostrarMsg("Artículo actualizado correctamente.", false);
-
-                    imgPreview.ImageUrl = string.IsNullOrWhiteSpace(art.ImagenUrl)
-                    ? "https://placehold.co/800x600?text=Sin+Imagen"
-                    : art.ImagenUrl;
                 }
                 else
                 {
                     int newId = artNeg.agregar(art);
-                    //hfId.Value = newId.ToString();
-                    //lblTitulo.Text = "Editar artículo";
                     MostrarMsg("Artículo creado correctamente.", false);
-
                     LimpiarFormulario();
                 }
 
-                // Actualizar preview por si se guardó con imagen nueva
+                // Actualizar preview (una sola vez)
                 imgPreview.ImageUrl = string.IsNullOrWhiteSpace(art.ImagenUrl)
                     ? "https://placehold.co/800x600?text=Sin+Imagen"
                     : art.ImagenUrl;
-            }
-            catch (System.Threading.ThreadAbortException)
-            {
-                // esperado en Response.Redirect
             }
             catch (FormatException)
             {
@@ -243,17 +236,19 @@ namespace TiendaOnline
             }
             catch (Exception ex)
             {
-                Session["error"] = ex.ToString();
+                LogError(ex, "btnGuardar_Click");
                 MostrarMsg("Ocurrió un error al guardar el artículo.", true);
             }
         }
+
 
         // =============== Helpers ===============
         private bool ValidarArchivoImagen(FileUpload fu)
         {
             var ext = System.IO.Path.GetExtension(fu.FileName)?.ToLowerInvariant();
             var okExt = new[] { ".jpg", ".jpeg", ".png" };
-            if (!okExt.Contains(ext))
+
+            if (string.IsNullOrEmpty(ext) || Array.IndexOf(okExt, ext) < 0)
             {
                 MostrarMsg("Solo se permiten imágenes JPG o PNG.", true);
                 return false;
@@ -267,6 +262,7 @@ namespace TiendaOnline
             }
             return true;
         }
+
 
         private static bool TryParseDecimal(string input, out decimal value)
         {

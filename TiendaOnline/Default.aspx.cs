@@ -2,7 +2,7 @@
 using negocio;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
+
 using System.Linq;
 using System.Net.Mail;
 using System.Threading.Tasks;
@@ -23,8 +23,6 @@ namespace TiendaOnline
         // Límite práctico de adjuntos (~25MB SMTP Gmail/Workspace)
         private static readonly long MAX_ATTACHMENT_BYTES = 24 * 1024 * 1024;
 
-        // (opcional) destino por defecto si no usás el modal
-        private string EmailDestinoDefault => ConfigurationManager.AppSettings["ReportToEmail"] ?? "destinatario@ejemplo.com";
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -206,36 +204,6 @@ namespace TiendaOnline
                 emailDestino: to,
                 asunto: $"Catálogo de Artículos (PDF) - {DateTime.Now:yyyy-MM-dd}",
                 cuerpoHtml: "<p>Adjuntamos el catálogo en PDF con encabezado institucional y espacio de logo.</p>",
-                adjuntos: new List<AttachmentDto> { adj }
-            );
-
-            _email.EnviarEmail();
-        }
-
-
-        private void EnviarHtmlA(string to)
-        {
-            var lista = ObtenerListaParaExport();
-            if (lista == null || lista.Count == 0)
-                throw new InvalidOperationException("No hay artículos para exportar.");
-
-            // Por ahora HTML (stub del PDF real)
-            byte[] bytesHtml = _artNeg.ExportarArticulosExcelHtml(lista);
-            EnsureAttachmentSize(bytesHtml);
-
-            string fecha = DateTime.Now.ToString("yyyyMMdd");
-
-            var adj = new AttachmentDto
-            {
-                FileName = $"articulos_{fecha}.html",
-                ContentType = "text/html; charset=utf-8",
-                Content = bytesHtml
-            };
-
-            _email.ArmarCorreoConAdjuntos(
-                emailDestino: to,
-                asunto: $"Catálogo de Artículos (HTML) - {DateTime.Now:yyyy-MM-dd}",
-                cuerpoHtml: "<p>Adjunto catálogo con Artículo / Stock / Precio en formato HTML. (Cuando activemos RDLC/iTextSharp, enviaremos PDF real.)</p>",
                 adjuntos: new List<AttachmentDto> { adj }
             );
 

@@ -10,7 +10,7 @@ namespace TiendaOnline
 {
     public partial class Home : System.Web.UI.Page
     {
-        // Usar SIEMPRE el tipo totalmente calificado para evitar choques de nombres
+        
         public List<dominio.Articulos> ListaTopVendidos { get; set; }
         public List<dominio.Articulos> ListaFiltrada { get; set; }
 
@@ -25,7 +25,7 @@ namespace TiendaOnline
                     BindProductos();
                 }
             }
-            catch (System.Threading.ThreadAbortException) { }
+            
             catch (Exception ex)
             {
                 LogError(ex, "Page_Load");
@@ -67,10 +67,8 @@ namespace TiendaOnline
             {
                 var artNeg = new ArticulosNegocio();
 
-                // Si tenés un método específico, usalo:
-                // var top = artNeg.listarMasVendidos(4) ?? new List<dominio.Articulos>();
-
-                // Fallback: tomar 4 del listar()
+               
+                // Tomamos 4 elementos del listar(), metodo para implementar la funcion mas vendidos mas adelante.
                 var all = artNeg.listar() ?? new List<dominio.Articulos>();
                 ListaTopVendidos = all.Take(4).ToList();  // <-- evita GetRange y asegura List<dominio.Articulos>
 
@@ -107,7 +105,7 @@ namespace TiendaOnline
                                 ? artNeg.buscar(texto, idMarca, idCat)
                                 : artNeg.listar();
 
-                ListaFiltrada = datos?.ToList() ?? new List<dominio.Articulos>();  // <-- evita CS0019 y CS0029
+                ListaFiltrada = datos?.ToList() ?? new List<dominio.Articulos>();  
                 lvProductos.DataSource = ListaFiltrada;
                 lvProductos.DataBind();
             }

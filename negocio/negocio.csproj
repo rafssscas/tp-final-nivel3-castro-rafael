@@ -143,7 +143,6 @@
     <Compile Include="CategoriasNegocio.cs" />
     <Compile Include="CloudinaryService.cs" />
     <Compile Include="EmailService.cs" />
-    <Compile Include="ExportService.cs" />
     <Compile Include="FavoritosNegocio.cs" />
     <Compile Include="MarcasNegocio.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

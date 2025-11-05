@@ -141,62 +141,7 @@ namespace negocio
             // Podrías llamar a un SP específico si querés (ej: sp_Articulos_ListarParaExport)
             return listar();
         }
-
-        // =========================
-        // NUEVO: Exportadores educativos
-        // =========================
-
-        /// <summary>
-        /// Genera CSV con separador ';' usando las columnas: Codigo;Descripcion;Stock;Precio
-        /// </summary>
-        public byte[] ExportarArticulosCsv(IEnumerable<Articulos> items = null)
-        {
-            var lista = items != null ? new List<Articulos>(items) : listarParaExport();
-            var sb = new StringBuilder();
-
-            sb.AppendLine("Codigo;Descripcion;Stock;Precio");
-
-            foreach (var a in lista)
-            {
-                var codigo = a.Codigo ?? "";
-                var descripcion = (a.Descripcion ?? a.Nombre ?? "");
-                var stock = a.GetType().GetProperty("Stock") != null
-                            ? (a.GetType().GetProperty("Stock").GetValue(a)?.ToString() ?? "")
-                            : ""; // si no tenés Stock en la entidad, deja vacío
-                var precio = a.Precio.HasValue ? a.Precio.Value.ToString() : "";
-
-                sb.AppendLine($"{CsvEsc(codigo)};{CsvEsc(descripcion)};{CsvEsc(stock)};{CsvEsc(precio)}");
-            }
-
-            return Encoding.UTF8.GetBytes(sb.ToString());
-        }
-
-        /// <summary>
-        /// Genera HTML tabular simple que Excel puede abrir como .xls
-        /// </summary>
-        public byte[] ExportarArticulosExcelHtml(IEnumerable<Articulos> items = null)
-        {
-            var lista = items != null ? new List<Articulos>(items) : listarParaExport();
-            var sb = new StringBuilder();
-
-            sb.AppendLine("<table>");
-            sb.AppendLine("<tr><th>Codigo</th><th>Descripcion</th><th>Stock</th><th>Precio</th></tr>");
-
-            foreach (var a in lista)
-            {
-                var codigo = a.Codigo ?? "";
-                var descripcion = (a.Descripcion ?? a.Nombre ?? "");
-                var stock = a.GetType().GetProperty("Stock") != null
-                            ? (a.GetType().GetProperty("Stock").GetValue(a)?.ToString() ?? "")
-                            : "";
-                var precio = a.Precio.HasValue ? a.Precio.Value.ToString() : "";
-
-                sb.AppendLine($"<tr><td>{HtmlEsc(codigo)}</td><td>{HtmlEsc(descripcion)}</td><td>{HtmlEsc(stock)}</td><td>{HtmlEsc(precio)}</td></tr>");
-            }
-
-            sb.AppendLine("</table>");
-            return Encoding.UTF8.GetBytes(sb.ToString());
-        }
+  
 
         // =========================
         // Helpers
@@ -226,17 +171,7 @@ namespace negocio
                 }
             };
 
-            // Stock opcional: solo mapear si la columna existe para no romper si el SP no la trae
-            if (HasColumn(dr, "Stock"))
-            {
-                var prop = art.GetType().GetProperty("Stock");
-                if (prop != null && prop.CanWrite)
-                {
-                    object val = dr["Stock"];
-                    if (val == DBNull.Value) val = null;
-                    prop.SetValue(art, val);
-                }
-            }
+            
 
             return art;
         }
@@ -259,33 +194,12 @@ namespace negocio
             return false;
         }
 
-        private static string CsvEsc(string s)
-        {
-            if (s == null) return "";
-            // Reemplazamos ; para no romper columnas y comillas dobles para CSV-friendly.
-            var t = s.Replace(";", ",").Replace("\"", "'");
-            // Si contiene separador o salto de línea, encerramos entre comillas
-            if (t.Contains(";") || t.Contains("\n") || t.Contains("\r"))
-                t = $"\"{t}\"";
-            return t;
-        }
-
-        private static string HtmlEsc(string s)
-        {
-            if (s == null) return "";
-            return System.Net.WebUtility.HtmlEncode(s);
-        }
-
         public List<Articulos> listarByIds(IEnumerable<int> ids)
         {
-            // Implementá el SP o query IN (@ids) en tu DAO.
-            // Si aún no podés hacer IN, como fallback:
+            
             var todos = listar() ?? new List<Articulos>();
             var set = new HashSet<int>(ids);
             return todos.Where(a => set.Contains(a.Id)).ToList();
         }
-
-
-
     }
 }

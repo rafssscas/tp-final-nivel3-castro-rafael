@@ -17,7 +17,7 @@ namespace TiendaOnline
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            // Sólo admin (el Master ya protege /Admin, pero dejamos doble check)
+            
             if (!Seguridad.esAdmin(Session["user"]))
             {
                 Session["returnUrl"] = Request.RawUrl;

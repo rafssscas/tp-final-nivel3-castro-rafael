@@ -3,10 +3,7 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <style>
-        /* =================================
-           VISIBILIDAD RESPONSIVE
-           ================================= */
-        
+       
         /* Oculta la vista de tarjetas (ListView) en escritorio (lg y más grande) */
         @media (min-width: 992px) {
             .d-mobile-only {
@@ -43,17 +40,17 @@
             justify-content: space-between;
             align-items: flex-start;
         }
-            .admin-card-header h5 {
+        .admin-card-header h5 {
                 font-weight: 700;
                 color: var(--sm-primary-accent);
                 margin: 0;
-            }
-            .admin-card-header .price {
+        }
+        .admin-card-header .price {
                 font-weight: 700;
                 color: var(--sm-text-dark);
                 font-size: 1.1rem;
                 white-space:nowrap;
-            }
+        }
         
         .admin-card-body .code {
             font-weight: 600;
@@ -81,11 +78,11 @@
             padding-top: 0.75rem;
             margin-top: 0.25rem;
         }
-            /* Hacemos que los botones ocupen el espacio disponible */
-            .admin-card-footer .btn {
-                flex-grow: 1; 
-                text-align: center;
-            }
+        /* Hacemos que los botones ocupen el espacio disponible */
+        .admin-card-footer .btn {
+             flex-grow: 1; 
+             text-align: center;
+        }
     </style>
 </asp:Content>
 
@@ -170,9 +167,7 @@
                                     <!-- Botón 'Editar' actualizado -->
                                     <a class="btn btn-sm btn-edit" href='FormularioArticulo.aspx?id=<%# Eval("Id") %>'>Editar</a>
                                     
-                                    <!-- Botón 'Eliminar' actualizado.
-                                         Quitamos OnClientClick="confirm(...)" y lo manejaremos con JS y SweetAlert
-                                         Usamos 'data-id' y 'data-nombre' para pasar info al script de SweetAlert -->
+                                 
                                     <asp:LinkButton runat="server" ID="btnEliminar" CssClass="btn btn-sm btn-delete btn-eliminar-desktop"
                                         Text="Eliminar" CommandName="Eliminar" CommandArgument='<%# Eval("Id") %>'
                                         data-id='<%# Eval("Id") %>' 

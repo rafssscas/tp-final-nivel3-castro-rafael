@@ -80,10 +80,7 @@ namespace negocio
         // =====================
         //        PDF
         // =====================
-        public static byte[] CatalogoArticulosPdf(
-            IEnumerable<dominio.Articulos> items,
-            string titulo = "Catálogo de Artículos",
-            string logoUrlOpcional = null)
+        public static byte[] CatalogoArticulosPdf(IEnumerable<dominio.Articulos> items,string titulo = "Catálogo de Artículos", string logoUrlOpcional = null)
         {
             using (var ms = new MemoryStream())
             {

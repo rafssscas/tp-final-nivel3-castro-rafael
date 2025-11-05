@@ -831,12 +831,7 @@
             </div>
         </nav>
 
-        
-        
-        
-        
-        
-   
+  
 
         <div class="container container-page py-4">
             <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server"></asp:ContentPlaceHolder>
@@ -849,7 +844,7 @@
         </p>
         <p class="mb-0" style="font-size:0.95em;">
             Desarrollado por
-            <a href="https://quipuconnect.com" target="_blank" class="fw-bold link-cambiar">
+            <a href="https://app.quipu-connect.com" target="_blank" class="fw-bold link-cambiar">
                 QUIPU CONNECT
             </a>
         </p>

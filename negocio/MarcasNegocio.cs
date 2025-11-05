@@ -31,28 +31,6 @@ namespace negocio
             finally { datos.cerrarConexion(); }
         }
 
-        public Marcas obtenerPorId(int id)
-        {
-            var datos = new AccesoDatos();
-            try
-            {
-                datos.setearProcedimiento("dbo.sp_Marcas_ObtenerPorId");
-                datos.setearParametro("@Id", id);
-                datos.ejecutarLectura();
-                if (datos.Lector.Read())
-                {
-                    return new Marcas
-                    {
-                        Id = (int)datos.Lector["Id"],
-                        Descripcion = datos.Lector["Descripcion"] as string
-                    };
-                }
-                return null;
-            }
-            catch { throw; }
-            finally { datos.cerrarConexion(); }
-        }
-
         public int agregar(Marcas m)
         {
             if (m == null || string.IsNullOrWhiteSpace(m.Descripcion))
