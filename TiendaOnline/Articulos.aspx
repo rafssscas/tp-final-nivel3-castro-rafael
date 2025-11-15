@@ -83,6 +83,90 @@
              flex-grow: 1; 
              text-align: center;
         }
+
+        /* ====== Paginadores unificados (GridView + ListView/DataPager) ====== */
+.pager{
+  display:flex;
+  flex-direction: row;     /* asegura fila */
+  justify-content:center;
+  align-items:center;
+  gap:.5rem;
+  flex-wrap:wrap;          /* permite saltar de línea si no entra */
+  margin-top:.75rem;
+}
+
+/* Evita que algún contenedor interno del DataPager fuerce bloque */
+.pager > * {
+  display: contents;       /* "desenvuelve" spans internos del DataPager */
+}
+
+/* Botones del pager (clase propia) */
+.pager .pager-btn,
+.pager a,
+.pager span{
+  display:inline-flex;     /* ¡horizontal incluso si Bootstrap marca block! */
+  align-items:center;
+  justify-content:center;
+  padding:.42rem .75rem;
+  border:1px solid var(--sm-border-color);
+  border-radius:.6rem;
+  text-decoration:none !important;
+  line-height:1;
+  background:#fff;
+  color:var(--sm-text-dark);
+  box-shadow:0 1px 4px rgba(0,0,0,.04);
+  flex:0 0 auto;           /* no se estiran a toda la fila */
+}
+
+/* Activo */
+.pager .active,
+.pager .pager-btn.active,
+.pager span.CurrentPage{
+  background:var(--sm-primary-accent);
+  color:#fff;
+  border-color:var(--sm-primary-accent);
+}
+
+/* Hover */
+.pager .pager-btn:hover,
+.pager a:hover{
+  background:var(--sm-primary-accent);
+  color:#fff;
+  border-color:var(--sm-primary-accent);
+}
+
+/* Compacto en móvil */
+@media (max-width:575.98px){
+  .pager .pager-btn,
+  .pager a,
+  .pager span{
+    padding:.35rem .6rem;
+    font-size:.92rem;
+  }
+}
+
+/* ====== GridView (escritorio) ====== */
+.gridview .pager table{ margin:0 auto; border-collapse:separate; border-spacing:.5rem; }
+.gridview .pager td{ padding:0; }
+.gridview .pager a, .gridview .pager span{
+  display:inline-flex;
+  padding:.42rem .75rem;
+  border:1px solid var(--sm-border-color);
+  border-radius:.6rem;
+  background:#fff;
+}
+.gridview .pager span{
+  background:var(--sm-primary-accent);
+  color:#fff;
+  border-color:var(--sm-primary-accent);
+}
+
+       
+
+
+
+
+
     </style>
 </asp:Content>
 
@@ -150,6 +234,12 @@
                 <asp:GridView ID="gvArticulos" runat="server" CssClass="table table-hover align-middle"
                     AutoGenerateColumns="False" DataKeyNames="Id" AllowPaging="true" PageSize="10"
                     OnPageIndexChanging="gvArticulos_PageIndexChanging" OnRowCommand="gvArticulos_RowCommand">
+                     <PagerStyle CssClass="pager" />
+                     <PagerSettings Mode="Numeric"
+                            PageButtonCount="5"
+                            FirstPageText="«" LastPageText="»"
+                            PreviousPageText="‹" NextPageText="›"
+                            Position="Bottom" />
                     <Columns>
                         <asp:BoundField DataField="Id" HeaderText="Id" Visible="false" />
                         <asp:BoundField DataField="Codigo" HeaderText="Código" />
@@ -168,11 +258,14 @@
                                     <a class="btn btn-sm btn-edit" href='FormularioArticulo.aspx?id=<%# Eval("Id") %>'>Editar</a>
                                     
                                  
-                                    <asp:LinkButton runat="server" ID="btnEliminar" CssClass="btn btn-sm btn-delete btn-eliminar-desktop"
-                                        Text="Eliminar" CommandName="Eliminar" CommandArgument='<%# Eval("Id") %>'
-                                        data-id='<%# Eval("Id") %>' 
-                                        data-nombre='<%# Eval("Nombre") %>'
-                                        OnClientClick="return false;" />
+                                   <asp:LinkButton runat="server" ID="btnEliminar" CssClass="btn btn-sm btn-delete btn-eliminar-desktop"
+    Text="Eliminar" CommandName="Eliminar" CommandArgument='<%# Eval("Id") %>'
+    CausesValidation="false"
+    data-id='<%# Eval("Id") %>'
+    data-nombre='<%# Eval("Nombre") %>'
+    data-uid='<%# ((Control)Container).FindControl("btnEliminar").UniqueID %>'
+    OnClientClick="return false;" />
+
                                 </div>
                             </ItemTemplate>
                         </asp:TemplateField>
@@ -191,13 +284,23 @@
                     <LayoutTemplate>
                         <div id="itemPlaceholder" runat="server"></div>
                         <!-- Paginador para el ListView -->
-                        <asp:DataPager ID="DataPager1" runat="server" PagedControlID="lvArticulos" PageSize="10" QueryStringField="page">
-                            <Fields>
-                                <asp:NextPreviousPagerField ButtonType="Link" ShowFirstPageButton="True" ShowNextPageButton="False" ButtonCssClass="page-link" />
-                                <asp:NumericPagerField ButtonType="Link" ButtonCount="5" CurrentPageLabelCssClass="page-link active" NumericButtonCssClass="page-link" />
-                                <asp:NextPreviousPagerField ButtonType="Link" ShowLastPageButton="True" ShowPreviousPageButton="False" ButtonCssClass="page-link" />
-                            </Fields>
-                        </asp:DataPager>
+                        <asp:DataPager ID="DataPager1" runat="server"
+    PagedControlID="lvArticulos" PageSize="10" QueryStringField="page"
+    CssClass="pager">
+  <Fields>
+    <asp:NextPreviousPagerField ButtonType="Link"
+        ShowFirstPageButton="True" ShowPreviousPageButton="True"
+        ShowNextPageButton="True" ShowLastPageButton="True"
+        FirstPageText="«" PreviousPageText="‹"
+        NextPageText="›" LastPageText="»"
+        ButtonCssClass="pager-btn" />   
+
+    <asp:NumericPagerField ButtonType="Link" ButtonCount="5"
+        NumericButtonCssClass="pager-btn"               
+        CurrentPageLabelCssClass="pager-btn active" />   
+  </Fields>
+</asp:DataPager>
+
                     </LayoutTemplate>
                     <ItemTemplate>
                         <!-- Plantilla de la tarjeta para móvil -->
@@ -215,11 +318,14 @@
                                 <a class="btn btn-sm btn-edit" href='FormularioArticulo.aspx?id=<%# Eval("Id") %>'>Editar</a>
                                 
                                 <!-- Botón 'Eliminar' con SweetAlert -->
-                                <asp:LinkButton runat="server" ID="btnEliminarCard" CssClass="btn btn-sm btn-delete btn-eliminar-mobile"
-                                    Text="Eliminar" CommandName="Eliminar" CommandArgument='<%# Eval("Id") %>'
-                                    data-id='<%# Eval("Id") %>' 
-                                    data-nombre='<%# Eval("Nombre") %>'
-                                    OnClientClick="return false;" />
+                              <asp:LinkButton runat="server" ID="btnEliminarCard" CssClass="btn btn-sm btn-delete btn-eliminar-mobile"
+    Text="Eliminar" CommandName="Eliminar" CommandArgument='<%# Eval("Id") %>'
+    CausesValidation="false"
+    data-id='<%# Eval("Id") %>'
+    data-nombre='<%# Eval("Nombre") %>'
+    data-uid='<%# ((Control)Container).FindControl("btnEliminarCard").UniqueID %>'
+    OnClientClick="return false;" />
+
                             </div>
                         </div>
                     </ItemTemplate>
@@ -231,9 +337,11 @@
                 </asp:ListView>
             </div>
 
-            <div class="d-flex justify-content-between mt-2">
-                <asp:Label ID="lblTotal" runat="server" CssClass="text-muted"></asp:Label>
-            </div>
+          <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-2 mt-2">
+    <asp:Label ID="lblTotal" runat="server" CssClass="text-muted mb-0"></asp:Label>
+    <!-- el pager ya está dentro del GridView/ListView, esto es solo si quisieras un pager global -->
+</div>
+
 
         </ContentTemplate>
         <Triggers>
@@ -297,33 +405,34 @@
 
 
             // 3. CONFIRMACIÓN DE ELIMINAR CON SWEETALERT
-            // Vinculamos el evento a las clases '.btn-eliminar-desktop' y '.btn-eliminar-mobile'
-            $('.btn-eliminar-desktop, .btn-eliminar-mobile').on('click', function (e) {
-                e.preventDefault(); // Detenemos el postback inmediato
+            $('.btn-eliminar-desktop, .btn-eliminar-mobile')
+                .off('click.swal')                 // evita handlers duplicados tras UpdatePanel
+                .on('click.swal', function (e) {
+                    e.preventDefault();
 
-                var button = $(this);
-                var id = button.data('id');
-                var nombre = button.data('nombre');
-                
-                // Usamos el 'id' del botón de LinkButton para el __doPostBack
-                var postBackScript = "__doPostBack('" + button.attr('id') + "', '')";
+                    var button = $(this);
+                    var nombre = button.data('nombre');
 
-                Swal.fire({
-                    title: '¿Estás seguro?',
-                    text: "Se eliminará el artículo '" + nombre + "'. ¡Esta acción no se puede revertir!",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#8B5E83', // Color primario (malva)
-                    cancelButtonColor: '#C69F77',  // Color secundario (ocre)
-                    confirmButtonText: 'Sí, eliminar',
-                    cancelButtonText: 'Cancelar'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        // Si confirma, ejecutamos el postback para eliminar
-                        eval(postBackScript);
-                    }
+                    // Usar UniqueID si está; fallback a name o id
+                    var target = button.data('uid') || button.attr('name') || button.attr('id');
+                    var postBackScript = "__doPostBack('" + target + "', '')";
+
+                    Swal.fire({
+                        title: '¿Estás seguro?',
+                        text: "Se eliminará el artículo '" + nombre + "'. ¡Esta acción no se puede revertir!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#8B5E83',
+                        cancelButtonColor: '#C69F77',
+                        confirmButtonText: 'Sí, eliminar',
+                        cancelButtonText: 'Cancelar'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            eval(postBackScript);
+                        }
+                    });
                 });
-            });
+
         }
 
         // Vinculamos la función 'pageLoad' para que se ejecute en la carga inicial
@@ -331,6 +440,9 @@
         $(document).ready(function() {
             pageLoad(null, null); // Carga inicial
         });
+
+
+
 
         if (typeof (Sys) !== 'undefined') {
             Sys.WebForms.PageRequestManager.getInstance().add_endRequest(pageLoad); // Cargas de UpdatePanel

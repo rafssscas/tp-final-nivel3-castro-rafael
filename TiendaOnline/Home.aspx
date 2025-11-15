@@ -1,46 +1,84 @@
 ﻿<%@ Page Title="Home" Language="C#" MasterPageFile="~/Master.Master" AutoEventWireup="true" CodeBehind="Home.aspx.cs" Inherits="TiendaOnline.Home" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
-    <style>
-        /* =================================
-           ESTILOS TARJETA DE PRODUCTO (Consistente con Default.aspx)
-           ================================= */
-        .product-catalog-card {
-            transition: all .25s ease;
+      <!-- 
+      =================================
+      SCRIPT PARA FILTRO + CARRUSEL
+      =================================
+    -->
+    <script type="text/javascript">
+        // IDs generados por ASP.NET
+        var txtBuscarID = '<%= txtBuscar.ClientID %>';
+        var btnFiltrarID = '<%= btnFiltrar.ClientID %>';
+        var searchTimeout;
+
+        function triggerFilterPostback() {
+            // Postback seguro de ASP.NET
+            __doPostBack(btnFiltrarID, '');
         }
 
-        .product-catalog-card .card-img-top {
-            height: 220px; /* Altura unificada */
-            object-fit: cover;
-            border-bottom: 1px solid var(--sm-border-color);
+        // Esta función la llama Master.Master cuando jQuery está cargado
+        function pageLoad(sender, args) {
+            if (!window.jQuery) return;
+
+            // 1. FILTRO AUTOMÁTICO POR TEXTO (keyup con debounce)
+            $('#' + txtBuscarID)
+                .off('keyup.filter')
+                .on('keyup.filter', function (e) {
+                    clearTimeout(searchTimeout);
+                    var query = $(this).val();
+
+                    if (e.keyCode === 13) {
+                        // Enter -> filtrar directo
+                        triggerFilterPostback();
+                        return;
+                    }
+
+                    if (query.length === 0 || query.length >= 3) {
+                        searchTimeout = setTimeout(function () {
+                            triggerFilterPostback();
+                        }, 600);
+                    }
+                });
+
+            // 2. FILTRO AUTOMÁTICO AL SALIR (blur)
+            $('#' + txtBuscarID)
+                .off('blur.filter')
+                .on('blur.filter', function () {
+                    triggerFilterPostback();
+                });
         }
 
-        .product-catalog-card .price {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: var(--sm-primary-accent);
-        }
-        
-        .product-catalog-card .card-title {
-            color: var(--sm-primary-accent);
-            font-weight: 700;
-        }
-        
-        .product-catalog-card .card-text {
-            min-height: 4.5em; /* Espacio para descripción (aprox 3 líneas) */
+        // --- CARRUSEL HERO (usa Bootstrap 5) ---
+        function initCarousel() {
+            var hero = document.getElementById('hero');
+            if (!hero || !window.bootstrap || !bootstrap.Carousel) return;
+
+            bootstrap.Carousel.getOrCreateInstance(hero, {
+                interval: 3000,
+                ride: 'carousel',
+                touch: true,
+                pause: false,
+                wrap: true
+            });
         }
 
-        @media (max-width: 767.98px) {
-            .product-catalog-card .card-img-top {
-                height: 250px;
-            }
+        // Inicialización cuando el DOM está listo
+        document.addEventListener('DOMContentLoaded', function () {
+            // pageLoad la llama el master una vez que jQuery está OK
+            initCarousel();
+        });
+
+        // Re-init tras cada postback parcial (UpdatePanel)
+        if (typeof (Sys) !== 'undefined' &&
+            Sys.WebForms &&
+            Sys.WebForms.PageRequestManager) {
+
+            Sys.WebForms.PageRequestManager.getInstance().add_endRequest(function () {
+                initCarousel();
+            });
         }
-        @media (max-width: 575.98px) {
-            .product-catalog-card .card-img-top {
-                height: 200px;
-            }
-        }
-    </style>
+    </script>
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
@@ -290,5 +328,32 @@
         if (typeof (Sys) !== 'undefined') {
             Sys.WebForms.PageRequestManager.getInstance().add_endRequest(pageLoad);
         }
+
+
+        function initCarousel() {
+            var hero = document.getElementById('hero');
+            if (hero) {
+                bootstrap.Carousel.getOrCreateInstance(hero, {
+                    interval: 3000,
+                    ride: 'carousel',
+                    touch: true,
+                    pause: false,
+                    wrap: true
+                });
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            initBootstrapComponents();
+            initCarousel();
+        });
+
+        if (typeof (Sys) !== 'undefined') {
+            Sys.WebForms.PageRequestManager.getInstance().add_endRequest(function () {
+                initBootstrapComponents();
+                initCarousel();
+            });
+        }
+
     </script>
 </asp:Content>

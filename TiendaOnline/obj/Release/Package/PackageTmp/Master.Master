@@ -1,0 +1,238 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Master.Master.cs" Inherits="TiendaOnline.Master" %>
+<!DOCTYPE html>
+<html lang="es">
+<head runat="server">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title><%: Page.Title %> - Tienda Otani</title>
+
+    <!-- Head por página -->
+    <asp:ContentPlaceHolder ID="head" runat="server"></asp:ContentPlaceHolder>
+
+    <!-- CSS base -->
+    <link rel="stylesheet" href="<%= ResolveUrl("~/Content/bootstrap.min.css") %>" />
+    <!-- Paleta pastel compartida -->
+    <link rel="stylesheet" href="<%= ResolveUrl("~/Content/site2.css") %>" />
+
+</head>
+<body>
+<form id="form1" runat="server">
+    <asp:ScriptManager ID="sm" runat="server" />
+    <nav class="navbar navbar-expand-lg navbar-light otani-navbar desktop-navbar-anim">
+        <div class="container-fluid">
+            <a runat="server" class="navbar-brand" href="~/Home.aspx">TIENDA OTANI</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#topNav"
+                    aria-controls="topNav" aria-expanded="false" aria-label="Abrir menú">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="topNav">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item"><a runat="server" class="nav-link" href="~/Home.aspx">Inicio</a></li>
+                    <li class="nav-item"><a runat="server" class="nav-link" href="~/Default.aspx">Catálogo</a></li>
+
+                    <% if (negocio.Seguridad.sesionActiva(Session["user"])) { %>
+                        <li class="nav-item"><a runat="server" class="nav-link" href="~/Favoritos.aspx">Mis Favoritos</a></li>
+                        <li class="nav-item"><a runat="server" class="nav-link" href="~/MiPerfil.aspx">Mi Perfil</a></li>
+                    <% } %>
+
+                    <% if (negocio.Seguridad.esAdmin(Session["user"])) { %>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="adminMenu" role="button"
+                               data-bs-toggle="dropdown" aria-expanded="false">Administración</a>
+                            <ul class="dropdown-menu" aria-labelledby="adminMenu">
+                                <li><a runat="server" class="dropdown-item" href="~/Articulos.aspx">Artículos</a></li>
+                                <li><a runat="server" class="dropdown-item" href="~/MarcasCategorias.aspx">Marcas y Categorías</a></li>
+                            </ul>
+                        </li>
+                    <% } %>
+                </ul>
+
+                <div class="d-flex align-items-center">
+                    <% if (!negocio.Seguridad.sesionActiva(Session["user"])) { %>
+                        <a runat="server" href="~/Login.aspx" class="btn btn-otani me-2">Login</a>
+                        <a runat="server" href="#" class="btn btn-secondary">Registrarse</a>
+                    <% } else { %>
+                        <asp:Label ID="lblUser" runat="server" CssClass="text-muted-600 me-3"></asp:Label>
+                        <asp:Button Text="Salir" ID="btnSalir" CssClass="btn btn-outline-light me-3"
+                                    OnClick="btnSalir_Click" runat="server" CausesValidation="false" UseSubmitBehavior="false" />
+                    <% } %>
+                    <asp:Image ID="imgAvatar" runat="server" CssClass="avatar" />
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container container-page py-4">
+        <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server"></asp:ContentPlaceHolder>
+    </div>
+
+    <footer class="bg-white border-top py-3 mt-auto">
+        <div class="container text-center">
+            <p class="mb-0 fw-semibold text-muted-600">
+                © <%= DateTime.Now.Year %> – <span class="text-dark">Tienda Otani</span>
+            </p>
+            <p class="mb-0" style="font-size:0.95em;">
+                Desarrollado por
+                <a href="https://app.quipu-connect.com" target="_blank" class="fw-bold link-cambiar">QUIPU CONNECT</a>
+            </p>
+        </div>
+    </footer>
+</form>
+
+<!-- ====== JS (orden crítico) ====== -->
+<script data-cfasync="false" src="<%= ResolveUrl("~/Scripts/jquery-3.7.1.min.js") %>"></script>
+<script data-cfasync="false" src="<%= ResolveUrl("~/Scripts/bootstrap.bundle.min.js") %>"></script>
+<script data-cfasync="false" src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<!-- Navbar effects en Vanilla JS -->
+<script data-cfasync="false">
+(function () {
+    function initNavbarEffects() {
+        var navAnim = document.querySelector('.desktop-navbar-anim');
+        if (navAnim) {
+            setTimeout(function () {
+                navAnim.classList.add('show');
+            }, 100);
+        }
+
+        var navSticky = document.querySelector('.otani-navbar');
+        if (!navSticky) return;
+
+        function applyShadow() {
+            if (window.scrollY > 10)
+                navSticky.classList.add('desktop-navbar-scrolled');
+            else
+                navSticky.classList.remove('desktop-navbar-scrolled');
+        }
+
+        applyShadow();
+        window.addEventListener('scroll', applyShadow, { passive: true });
+    }
+
+        // Mantengo el nombre de la función que ya usabas
+        function initBootstrapComponents() {
+            if (!window.bootstrap) return;
+
+            // Colapsables (navbar, etc.)
+            document.querySelectorAll('.collapse').forEach(function (el) {
+                bootstrap.Collapse.getOrCreateInstance(el, { toggle: false });
+            });
+
+            // Dropdowns (incluye Administración)
+            document.querySelectorAll('[data-bs-toggle="dropdown"]').forEach(function (el) {
+                bootstrap.Dropdown.getOrCreateInstance(el);
+            });
+        }
+
+        // Fallback si Bootstrap NO está disponible (JS roto o no cargó el bundle)
+        function initNavbarFallback() {
+            if (window.bootstrap && window.bootstrap.Collapse && window.bootstrap.Dropdown) {
+                // Si Bootstrap está OK, no metemos mano
+                return;
+            }
+
+            // === Fallback: botón hamburguesa mobile ===
+            var toggler = document.querySelector('.navbar-toggler[data-bs-target="#topNav"]');
+            var nav = document.getElementById('topNav');
+            if (toggler && nav) {
+                toggler.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    nav.classList.toggle('show');
+                });
+            }
+
+            // === Fallback: dropdown Administración ===
+            var adminToggle = document.getElementById('adminMenu');
+            if (adminToggle) {
+                var dropdown = adminToggle.nextElementSibling; // <ul class="dropdown-menu">
+                if (dropdown && dropdown.classList.contains('dropdown-menu')) {
+                    adminToggle.addEventListener('click', function (e) {
+                        e.preventDefault();
+                        dropdown.classList.toggle('show');
+                    });
+
+                    // Cerrar al hacer click fuera
+                    document.addEventListener('click', function (e) {
+                        if (!dropdown.contains(e.target) && e.target !== adminToggle) {
+                            dropdown.classList.remove('show');
+                        }
+                    });
+                }
+            }
+        }
+
+        // Inicial: DOM listo
+        function onReady() {
+            initNavbarEffects();
+            initBootstrapComponents();
+            initNavbarFallback(); // por si el bundle no cargó
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', onReady);
+        } else {
+            onReady();
+        }
+
+        // Re-init tras UpdatePanel
+        if (window.Sys && Sys.WebForms && Sys.WebForms.PageRequestManager) {
+            Sys.WebForms.PageRequestManager.getInstance().add_endRequest(function () {
+                initBootstrapComponents();
+                initNavbarFallback();
+            });
+        }
+    })();
+</script>
+
+    <!-- pageLoad seguro + jQuery fallback -->
+<script data-cfasync="false">
+    (function () {
+
+        function safeRunPageLoad() {
+            if (typeof window.pageLoad === 'function' && window.jQuery) {
+                try {
+                    window.pageLoad(null, null);
+                } catch (e) {
+                    console.error('pageLoad error:', e);
+                }
+            }
+        }
+
+        function ensurejQuery(cb) {
+            if (window.jQuery) { cb(); return; }
+            console.warn('jQuery no cargado aún. Inyectando fallback...');
+            var s = document.createElement('script');
+            s.src = '<%= ResolveUrl("~/Scripts/jquery-3.7.1.min.js") %>';
+            s.onload = cb;
+            document.head.appendChild(s);
+        }
+
+        function onReady() {
+            ensurejQuery(function () { safeRunPageLoad(); });
+        }
+
+        if (document.readyState === 'loading')
+            document.addEventListener('DOMContentLoaded', onReady);
+        else
+            onReady();
+
+        if (window.Sys && Sys.WebForms && Sys.WebForms.PageRequestManager) {
+            Sys.WebForms.PageRequestManager.getInstance().add_endRequest(function () {
+                ensurejQuery(function () { safeRunPageLoad(); });
+            });
+        }
+
+        // Enter global: solo permitimos dentro de filtros (filters-scope)
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') {
+                if (e.target && e.target.tagName === 'TEXTAREA') return;
+                var inFilters = e.target.closest && e.target.closest('.filters-scope');
+                if (!inFilters) e.preventDefault();
+            }
+        });
+
+    })();
+</script>
+</body>
+</html>

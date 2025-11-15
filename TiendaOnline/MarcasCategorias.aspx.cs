@@ -233,8 +233,8 @@ namespace TiendaOnline
 
         protected void lvMarcas_ItemCommand(object sender, ListViewCommandEventArgs e)
         {
-            // Manejar la eliminación (el CommandName "Delete" lo captura SweetAlert)
-            if (e.CommandName == "Delete")
+            
+            if (e.CommandName == "Eliminar")
             {
                 try
                 {

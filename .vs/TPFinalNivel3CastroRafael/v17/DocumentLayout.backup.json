@@ -3,40 +3,28 @@
   "WorkspaceRootPath": "C:\\Users\\rafae\\Desktop\\PROYECTOS\\TpFinalN3\\TiendaOnline\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{0EA83468-CAEA-41BC-870D-6F23B795A2AC}|TiendaOnline\\TiendaOnline.csproj|c:\\users\\rafae\\desktop\\proyectos\\tpfinaln3\\tiendaonline\\tiendaonline\\marcascategorias.aspx.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0EA83468-CAEA-41BC-870D-6F23B795A2AC}|TiendaOnline\\TiendaOnline.csproj|solutionrelative:tiendaonline\\marcascategorias.aspx.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{0EA83468-CAEA-41BC-870D-6F23B795A2AC}|TiendaOnline\\TiendaOnline.csproj|c:\\users\\rafae\\desktop\\proyectos\\tpfinaln3\\tiendaonline\\tiendaonline\\master.master||{B30AFBFF-D992-43B7-B62D-2642580A2883}",
+      "RelativeMoniker": "D:0:0:{0EA83468-CAEA-41BC-870D-6F23B795A2AC}|TiendaOnline\\TiendaOnline.csproj|solutionrelative:tiendaonline\\master.master||{B30AFBFF-D992-43B7-B62D-2642580A2883}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{0EA83468-CAEA-41BC-870D-6F23B795A2AC}|TiendaOnline\\TiendaOnline.csproj|c:\\users\\rafae\\desktop\\proyectos\\tpfinaln3\\tiendaonline\\tiendaonline\\marcascategorias.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}",
-      "RelativeMoniker": "D:0:0:{0EA83468-CAEA-41BC-870D-6F23B795A2AC}|TiendaOnline\\TiendaOnline.csproj|solutionrelative:tiendaonline\\marcascategorias.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0EA83468-CAEA-41BC-870D-6F23B795A2AC}|TiendaOnline\\TiendaOnline.csproj|c:\\users\\rafae\\desktop\\proyectos\\tpfinaln3\\tiendaonline\\tiendaonline\\login.aspx.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0EA83468-CAEA-41BC-870D-6F23B795A2AC}|TiendaOnline\\TiendaOnline.csproj|solutionrelative:tiendaonline\\login.aspx.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{0EA83468-CAEA-41BC-870D-6F23B795A2AC}|TiendaOnline\\TiendaOnline.csproj|c:\\users\\rafae\\desktop\\proyectos\\tpfinaln3\\tiendaonline\\tiendaonline\\default.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}",
+      "RelativeMoniker": "D:0:0:{0EA83468-CAEA-41BC-870D-6F23B795A2AC}|TiendaOnline\\TiendaOnline.csproj|solutionrelative:tiendaonline\\default.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{0EA83468-CAEA-41BC-870D-6F23B795A2AC}|TiendaOnline\\TiendaOnline.csproj|c:\\users\\rafae\\desktop\\proyectos\\tpfinaln3\\tiendaonline\\tiendaonline\\login.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}",
       "RelativeMoniker": "D:0:0:{0EA83468-CAEA-41BC-870D-6F23B795A2AC}|TiendaOnline\\TiendaOnline.csproj|solutionrelative:tiendaonline\\login.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{0EA83468-CAEA-41BC-870D-6F23B795A2AC}|TiendaOnline\\TiendaOnline.csproj|c:\\users\\rafae\\desktop\\proyectos\\tpfinaln3\\tiendaonline\\tiendaonline\\home.aspx.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0EA83468-CAEA-41BC-870D-6F23B795A2AC}|TiendaOnline\\TiendaOnline.csproj|solutionrelative:tiendaonline\\home.aspx.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{0EA83468-CAEA-41BC-870D-6F23B795A2AC}|TiendaOnline\\TiendaOnline.csproj|c:\\users\\rafae\\desktop\\proyectos\\tpfinaln3\\tiendaonline\\tiendaonline\\content\\site2.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{0EA83468-CAEA-41BC-870D-6F23B795A2AC}|TiendaOnline\\TiendaOnline.csproj|solutionrelative:tiendaonline\\content\\site2.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0EA83468-CAEA-41BC-870D-6F23B795A2AC}|TiendaOnline\\TiendaOnline.csproj|c:\\users\\rafae\\desktop\\proyectos\\tpfinaln3\\tiendaonline\\tiendaonline\\content\\site.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{0EA83468-CAEA-41BC-870D-6F23B795A2AC}|TiendaOnline\\TiendaOnline.csproj|solutionrelative:tiendaonline\\content\\site.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{0EA83468-CAEA-41BC-870D-6F23B795A2AC}|TiendaOnline\\TiendaOnline.csproj|c:\\users\\rafae\\desktop\\proyectos\\tpfinaln3\\tiendaonline\\tiendaonline\\home.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}",
       "RelativeMoniker": "D:0:0:{0EA83468-CAEA-41BC-870D-6F23B795A2AC}|TiendaOnline\\TiendaOnline.csproj|solutionrelative:tiendaonline\\home.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0EA83468-CAEA-41BC-870D-6F23B795A2AC}|TiendaOnline\\TiendaOnline.csproj|c:\\users\\rafae\\desktop\\proyectos\\tpfinaln3\\tiendaonline\\tiendaonline\\global.asax.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0EA83468-CAEA-41BC-870D-6F23B795A2AC}|TiendaOnline\\TiendaOnline.csproj|solutionrelative:tiendaonline\\global.asax.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0EA83468-CAEA-41BC-870D-6F23B795A2AC}|TiendaOnline\\TiendaOnline.csproj|c:\\users\\rafae\\desktop\\proyectos\\tpfinaln3\\tiendaonline\\tiendaonline\\formularioarticulo.aspx.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0EA83468-CAEA-41BC-870D-6F23B795A2AC}|TiendaOnline\\TiendaOnline.csproj|solutionrelative:tiendaonline\\formularioarticulo.aspx.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0EA83468-CAEA-41BC-870D-6F23B795A2AC}|TiendaOnline\\TiendaOnline.csproj|c:\\users\\rafae\\desktop\\proyectos\\tpfinaln3\\tiendaonline\\tiendaonline\\formularioarticulo.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}",
-      "RelativeMoniker": "D:0:0:{0EA83468-CAEA-41BC-870D-6F23B795A2AC}|TiendaOnline\\TiendaOnline.csproj|solutionrelative:tiendaonline\\formularioarticulo.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}"
     }
   ],
   "DocumentGroupContainers": [
@@ -46,7 +34,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 466,
-          "SelectedChildIndex": 7,
+          "SelectedChildIndex": 11,
           "Children": [
             {
               "$type": "Bookmark",
@@ -78,46 +66,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "MarcasCategorias.aspx.cs",
-              "DocumentMoniker": "C:\\Users\\rafae\\Desktop\\PROYECTOS\\TpFinalN3\\TiendaOnline\\TiendaOnline\\MarcasCategorias.aspx.cs",
-              "RelativeDocumentMoniker": "TiendaOnline\\MarcasCategorias.aspx.cs",
-              "ToolTip": "C:\\Users\\rafae\\Desktop\\PROYECTOS\\TpFinalN3\\TiendaOnline\\TiendaOnline\\MarcasCategorias.aspx.cs",
-              "RelativeToolTip": "TiendaOnline\\MarcasCategorias.aspx.cs",
-              "ViewState": "AgIAAAUAAAAAAAAAAAAowAgAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-05T05:36:32.113Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "MarcasCategorias.aspx",
-              "DocumentMoniker": "C:\\Users\\rafae\\Desktop\\PROYECTOS\\TpFinalN3\\TiendaOnline\\TiendaOnline\\MarcasCategorias.aspx",
-              "RelativeDocumentMoniker": "TiendaOnline\\MarcasCategorias.aspx",
-              "ToolTip": "C:\\Users\\rafae\\Desktop\\PROYECTOS\\TpFinalN3\\TiendaOnline\\TiendaOnline\\MarcasCategorias.aspx",
-              "RelativeToolTip": "TiendaOnline\\MarcasCategorias.aspx",
-              "LogicalView": "7651a703-06e5-11d1-8ebd-00a0c90f26ea",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000195|",
-              "WhenOpened": "2025-11-05T05:36:22.403Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "Login.aspx.cs",
-              "DocumentMoniker": "C:\\Users\\rafae\\Desktop\\PROYECTOS\\TpFinalN3\\TiendaOnline\\TiendaOnline\\Login.aspx.cs",
-              "RelativeDocumentMoniker": "TiendaOnline\\Login.aspx.cs",
-              "ToolTip": "C:\\Users\\rafae\\Desktop\\PROYECTOS\\TpFinalN3\\TiendaOnline\\TiendaOnline\\Login.aspx.cs",
-              "RelativeToolTip": "TiendaOnline\\Login.aspx.cs",
-              "ViewState": "AgIAABsAAAAAAAAAAAAswEEAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-05T05:35:58.011Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
               "Title": "Login.aspx",
               "DocumentMoniker": "C:\\Users\\rafae\\Desktop\\PROYECTOS\\TpFinalN3\\TiendaOnline\\TiendaOnline\\Login.aspx",
               "RelativeDocumentMoniker": "TiendaOnline\\Login.aspx",
@@ -125,20 +74,59 @@
               "RelativeToolTip": "TiendaOnline\\Login.aspx",
               "LogicalView": "7651a703-06e5-11d1-8ebd-00a0c90f26ea",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000195|",
-              "WhenOpened": "2025-11-05T05:35:35.666Z",
+              "WhenOpened": "2025-11-15T10:02:43.521Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Default.aspx",
+              "DocumentMoniker": "C:\\Users\\rafae\\Desktop\\PROYECTOS\\TpFinalN3\\TiendaOnline\\TiendaOnline\\Default.aspx",
+              "RelativeDocumentMoniker": "TiendaOnline\\Default.aspx",
+              "ToolTip": "C:\\Users\\rafae\\Desktop\\PROYECTOS\\TpFinalN3\\TiendaOnline\\TiendaOnline\\Default.aspx",
+              "RelativeToolTip": "TiendaOnline\\Default.aspx",
+              "LogicalView": "7651a703-06e5-11d1-8ebd-00a0c90f26ea",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000195|",
+              "WhenOpened": "2025-11-15T10:02:15.116Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 4,
-              "Title": "Home.aspx.cs",
-              "DocumentMoniker": "C:\\Users\\rafae\\Desktop\\PROYECTOS\\TpFinalN3\\TiendaOnline\\TiendaOnline\\Home.aspx.cs",
-              "RelativeDocumentMoniker": "TiendaOnline\\Home.aspx.cs",
-              "ToolTip": "C:\\Users\\rafae\\Desktop\\PROYECTOS\\TpFinalN3\\TiendaOnline\\TiendaOnline\\Home.aspx.cs",
-              "RelativeToolTip": "TiendaOnline\\Home.aspx.cs",
-              "ViewState": "AgIAAJUAAAAAAAAAAAAAwKkAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-05T05:24:11.013Z",
+              "Title": "site.css",
+              "DocumentMoniker": "C:\\Users\\rafae\\Desktop\\PROYECTOS\\TpFinalN3\\TiendaOnline\\TiendaOnline\\Content\\site.css",
+              "RelativeDocumentMoniker": "TiendaOnline\\Content\\site.css",
+              "ToolTip": "C:\\Users\\rafae\\Desktop\\PROYECTOS\\TpFinalN3\\TiendaOnline\\TiendaOnline\\Content\\site.css",
+              "RelativeToolTip": "TiendaOnline\\Content\\site.css",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2025-11-15T09:44:53.369Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "site2.css",
+              "DocumentMoniker": "C:\\Users\\rafae\\Desktop\\PROYECTOS\\TpFinalN3\\TiendaOnline\\TiendaOnline\\Content\\site2.css",
+              "RelativeDocumentMoniker": "TiendaOnline\\Content\\site2.css",
+              "ToolTip": "C:\\Users\\rafae\\Desktop\\PROYECTOS\\TpFinalN3\\TiendaOnline\\TiendaOnline\\Content\\site2.css",
+              "RelativeToolTip": "TiendaOnline\\Content\\site2.css",
+              "ViewState": "AgIAAO8CAAAAAAAAAAAYwBoDAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2025-11-15T09:44:49.038Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Master.Master",
+              "DocumentMoniker": "C:\\Users\\rafae\\Desktop\\PROYECTOS\\TpFinalN3\\TiendaOnline\\TiendaOnline\\Master.Master",
+              "RelativeDocumentMoniker": "TiendaOnline\\Master.Master",
+              "ToolTip": "C:\\Users\\rafae\\Desktop\\PROYECTOS\\TpFinalN3\\TiendaOnline\\TiendaOnline\\Master.Master",
+              "RelativeToolTip": "TiendaOnline\\Master.Master",
+              "LogicalView": "7651a703-06e5-11d1-8ebd-00a0c90f26ea",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000195|",
+              "WhenOpened": "2025-11-15T09:32:12.182Z",
               "EditorCaption": ""
             },
             {
@@ -151,46 +139,7 @@
               "RelativeToolTip": "TiendaOnline\\Home.aspx",
               "LogicalView": "7651a703-06e5-11d1-8ebd-00a0c90f26ea",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000195|",
-              "WhenOpened": "2025-11-05T05:23:41.952Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "Global.asax.cs",
-              "DocumentMoniker": "C:\\Users\\rafae\\Desktop\\PROYECTOS\\TpFinalN3\\TiendaOnline\\TiendaOnline\\Global.asax.cs",
-              "RelativeDocumentMoniker": "TiendaOnline\\Global.asax.cs",
-              "ToolTip": "C:\\Users\\rafae\\Desktop\\PROYECTOS\\TpFinalN3\\TiendaOnline\\TiendaOnline\\Global.asax.cs",
-              "RelativeToolTip": "TiendaOnline\\Global.asax.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-05T05:23:39.315Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "FormularioArticulo.aspx.cs",
-              "DocumentMoniker": "C:\\Users\\rafae\\Desktop\\PROYECTOS\\TpFinalN3\\TiendaOnline\\TiendaOnline\\FormularioArticulo.aspx.cs",
-              "RelativeDocumentMoniker": "TiendaOnline\\FormularioArticulo.aspx.cs",
-              "ToolTip": "C:\\Users\\rafae\\Desktop\\PROYECTOS\\TpFinalN3\\TiendaOnline\\TiendaOnline\\FormularioArticulo.aspx.cs",
-              "RelativeToolTip": "TiendaOnline\\FormularioArticulo.aspx.cs",
-              "ViewState": "AgIAAP8AAAAAAAAAAADwv0oBAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-05T05:03:48.881Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "FormularioArticulo.aspx",
-              "DocumentMoniker": "C:\\Users\\rafae\\Desktop\\PROYECTOS\\TpFinalN3\\TiendaOnline\\TiendaOnline\\FormularioArticulo.aspx",
-              "RelativeDocumentMoniker": "TiendaOnline\\FormularioArticulo.aspx",
-              "ToolTip": "C:\\Users\\rafae\\Desktop\\PROYECTOS\\TpFinalN3\\TiendaOnline\\TiendaOnline\\FormularioArticulo.aspx",
-              "RelativeToolTip": "TiendaOnline\\FormularioArticulo.aspx",
-              "LogicalView": "7651a703-06e5-11d1-8ebd-00a0c90f26ea",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000195|",
-              "WhenOpened": "2025-11-05T05:03:32.278Z",
+              "WhenOpened": "2025-11-15T09:31:57.042Z",
               "EditorCaption": ""
             }
           ]

@@ -42,6 +42,20 @@ namespace TiendaOnline
                 Session["returnUrl"] = Request.RawUrl;
                 Response.Redirect(ResolveUrl("~/Login.aspx"), false);
             }
+
+
+            if (!IsPostBack)
+            {
+                if (Session["user"] is dominio.Users usr &&
+                    !string.IsNullOrEmpty(usr.UrlImagenPerfil))
+                {
+                    imgAvatar.ImageUrl = usr.UrlImagenPerfil;
+                }
+                else
+                {
+                    imgAvatar.ImageUrl = "~/Content/img/avatar-default.png"; // poné un PNG genérico
+                }
+            }
         }
 
         protected void btnSalir_Click(object sender, EventArgs e)

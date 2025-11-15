@@ -1,0 +1,6 @@
+C:\Users\rafae\Desktop\PROYECTOS\TpFinalN3\TiendaOnline\dominio\bin\Release\dominio.dll
+C:\Users\rafae\Desktop\PROYECTOS\TpFinalN3\TiendaOnline\dominio\bin\Release\dominio.pdb
+C:\Users\rafae\Desktop\PROYECTOS\TpFinalN3\TiendaOnline\dominio\obj\Release\dominio.csproj.AssemblyReference.cache
+C:\Users\rafae\Desktop\PROYECTOS\TpFinalN3\TiendaOnline\dominio\obj\Release\dominio.csproj.CoreCompileInputs.cache
+C:\Users\rafae\Desktop\PROYECTOS\TpFinalN3\TiendaOnline\dominio\obj\Release\dominio.dll
+C:\Users\rafae\Desktop\PROYECTOS\TpFinalN3\TiendaOnline\dominio\obj\Release\dominio.pdb

@@ -119,11 +119,15 @@
                                             <div class="d-flex gap-2 justify-content-end">
                                                 <asp:LinkButton runat="server" ID="btnEditar" CssClass="btn btn-sm btn-edit"
                                                     Text="Editar" CommandName="Edit" />
-                                                <asp:LinkButton runat="server" ID="btnEliminar" CssClass="btn btn-sm btn-delete btn-eliminar-marca"
-                                                    Text="Eliminar" CommandName="Delete" 
-                                                    data-id='<%# Eval("Id") %>' 
-                                                    data-nombre='<%# Eval("Descripcion") %>'
-                                                    OnClientClick="return false;" />
+                                               <asp:LinkButton runat="server" ID="btnEliminar" CssClass="btn btn-sm btn-delete btn-eliminar-marca"
+    Text="Eliminar" CommandName="Eliminar"
+    CausesValidation="false"
+    data-id='<%# Eval("Id") %>'
+    data-nombre='<%# Eval("Descripcion") %>'
+    data-uid='<%# ((System.Web.UI.Control)Container).FindControl("btnEliminar").UniqueID %>'
+
+    OnClientClick="return false;" />
+
                                             </div>
                                         </ItemTemplate>
                                         <EditItemTemplate>
@@ -159,10 +163,14 @@
                                             <asp:LinkButton runat="server" ID="btnEditar" CssClass="btn btn-sm btn-edit"
                                                 Text="Editar" CommandName="Edit" />
                                             <asp:LinkButton runat="server" ID="btnEliminar" CssClass="btn btn-sm btn-delete btn-eliminar-marca-mobile"
-                                                Text="Eliminar" CommandName="Delete" CommandArgument='<%# Eval("Id") %>'
-                                                data-id='<%# Eval("Id") %>' 
-                                                data-nombre='<%# Eval("Descripcion") %>'
-                                                OnClientClick="return false;" />
+    Text="Eliminar" CommandName="Eliminar" CommandArgument='<%# Eval("Id") %>'
+    CausesValidation="false"
+    data-id='<%# Eval("Id") %>'
+    data-nombre='<%# Eval("Descripcion") %>'
+    data-uid='<%# ((System.Web.UI.Control)Container).FindControl("btnEliminar").UniqueID %>'
+
+    OnClientClick="return false;" />
+
                                         </div>
                                     </div>
                                 </ItemTemplate>
@@ -235,10 +243,14 @@
                                                 <asp:LinkButton runat="server" ID="btnEditarCat" CssClass="btn btn-sm btn-edit"
                                                     Text="Editar" CommandName="Edit" />
                                                 <asp:LinkButton runat="server" ID="btnEliminarCat" CssClass="btn btn-sm btn-delete btn-eliminar-categoria"
-                                                    Text="Eliminar" CommandName="Delete" 
-                                                    data-id='<%# Eval("Id") %>' 
-                                                    data-nombre='<%# Eval("Descripcion") %>'
-                                                    OnClientClick="return false;" />
+    Text="Eliminar" CommandName="Eliminar"
+    CausesValidation="false"
+    data-id='<%# Eval("Id") %>'
+    data-nombre='<%# Eval("Descripcion") %>'
+    data-uid='<%# ((System.Web.UI.Control)Container).FindControl("btnEliminarCat").UniqueID %>'
+
+    OnClientClick="return false;" />
+
                                             </div>
                                         </ItemTemplate>
                                         <EditItemTemplate>
@@ -274,10 +286,14 @@
                                             <asp:LinkButton runat="server" ID="btnEditar" CssClass="btn btn-sm btn-edit"
                                                 Text="Editar" CommandName="Edit" />
                                             <asp:LinkButton runat="server" ID="btnEliminar" CssClass="btn btn-sm btn-delete btn-eliminar-categoria-mobile"
-                                                Text="Eliminar" CommandName="Delete" CommandArgument='<%# Eval("Id") %>'
-                                                data-id='<%# Eval("Id") %>' 
-                                                data-nombre='<%# Eval("Descripcion") %>'
-                                                OnClientClick="return false;" />
+    Text="Eliminar" CommandName="Eliminar" CommandArgument='<%# Eval("Id") %>'
+    CausesValidation="false"
+    data-id='<%# Eval("Id") %>'
+    data-nombre='<%# Eval("Descripcion") %>'
+   data-uid='<%# ((System.Web.UI.Control)Container).FindControl("btnEliminar").UniqueID %>'
+
+    OnClientClick="return false;" />
+
                                         </div>
                                     </div>
                                 </ItemTemplate>
@@ -320,22 +336,20 @@
                 e.preventDefault();
                 var button = $(this);
                 var nombre = button.data('nombre');
-                var postBackScript = "__doPostBack('" + button.attr('id') + "', '')";
+                // UniqueID primero; si no está, intenta con "name" (algunos controles lo traen); último recurso: id
+                var target = button.data('uid') || button.attr('name') || button.attr('id');
+                var postBackScript = "__doPostBack('" + target + "', '')";
 
                 Swal.fire({
                     title: '¿Estás seguro?',
                     text: "Se eliminará la marca '" + nombre + "'. ¡Esto puede fallar si tiene artículos asociados!",
                     icon: 'warning',
                     showCancelButton: true,
-                    confirmButtonColor: '#8B5E83', // Malva
-                    cancelButtonColor: '#C69F77',  // Ocre
+                    confirmButtonColor: '#8B5E83',
+                    cancelButtonColor: '#C69F77',
                     confirmButtonText: 'Sí, eliminar',
                     cancelButtonText: 'Cancelar'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        eval(postBackScript);
-                    }
-                });
+                }).then((result) => { if (result.isConfirmed) { eval(postBackScript); } });
             });
 
             // 2. CONFIRMACIÓN PARA CATEGORÍAS (Escritorio + Móvil)
@@ -343,22 +357,19 @@
                 e.preventDefault();
                 var button = $(this);
                 var nombre = button.data('nombre');
-                var postBackScript = "__doPostBack('" + button.attr('id') + "', '')";
+                var target = button.data('uid') || button.attr('name') || button.attr('id');
+                var postBackScript = "__doPostBack('" + target + "', '')";
 
                 Swal.fire({
                     title: '¿Estás seguro?',
                     text: "Se eliminará la categoría '" + nombre + "'. ¡Esto puede fallar si tiene artículos asociados!",
                     icon: 'warning',
                     showCancelButton: true,
-                    confirmButtonColor: '#8B5E83', // Malva
-                    cancelButtonColor: '#C69F77',  // Ocre
+                    confirmButtonColor: '#8B5E83',
+                    cancelButtonColor: '#C69F77',
                     confirmButtonText: 'Sí, eliminar',
                     cancelButtonText: 'Cancelar'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        eval(postBackScript);
-                    }
-                });
+                }).then((result) => { if (result.isConfirmed) { eval(postBackScript); } });
             });
         }
 
